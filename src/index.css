@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button {
+  &:disabled,
+  &[data-disabled] {
+    background-color: rgb(11, 56, 96);
+  }
+}
+
+::-webkit-scrollbar {
+  background-color: rgb(11, 56, 96);
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(11, 56, 96);
+}

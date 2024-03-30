@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:wght@400;500&family=Satisfy&display=swap');
+
+
+body {
+  background-color: rgb(27, 27, 27);
+  color: white;
+  font-family: "Montserrat", sans-serif;
+}
+
+.button {
+  &:disabled,
+  &[data-disabled] {
+    background-color: rgb(11, 56, 96);
+  }
+}
