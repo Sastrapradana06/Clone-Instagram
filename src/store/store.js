@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { getUserLogin } from './api';
 
 const useAppStore = create((set) => ({
 
@@ -6,16 +7,18 @@ const useAppStore = create((set) => ({
   // setIsShowStatus: () => set((state) => ({ isShowStatus: state.isShowStatus === false ? true : false })),
   setIsShowStatus : (data) => set({ isShowStatus: data }),
 
-  dataUser : {
-    username: 'zoe sean',
-    nama_pengguna: 'sean_',
-    imgProfil: 'https://i.pinimg.com/564x/c0/18/31/c0183163ba468401a02ae53b2665daa1.jpg',
-    bio: 'software engineer',
-    tautan: 'me.com',
-    pengikut: 71000,
-    mengikuti: 160,
+  dataUser : undefined,
+  updateDataUser : (data) => set({dataUser: data}),
+  getUser: async () => {
+    try {
+      const res = await getUserLogin()
+      if(res.status) {
+        set({dataUser: res.data})
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
-  updateDataUser : (data) => set({dataUser: data})
 
 
 }))

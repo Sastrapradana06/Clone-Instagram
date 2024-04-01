@@ -1,17 +1,33 @@
 import { useState } from 'react';
 import { FaEyeSlash } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
-import { Button } from '@mantine/core';
+import { Button, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { handleToast } from '../../store/utils';
+import { registerAkun } from '../../store/api';
+
 
 
 export default function Sign() {
+  const [isLoading, setIsLoading] = useState(false)
   const [typePassword, setTypePassword] = useState('password')
   const [data, setData] = useState({
-    nama: '',
+    username: '',
+    nama_pengguna: '',
     email: '',
-    kata_sandi: ''
+    password: ''
   })
+
+  const clearInput = () => {
+    const clearData = {
+      username: '',
+      nama_pengguna: '',
+      email: '',
+      password: ''
+    }
+    setData(clearData)
+  }
 
   const navigate = useNavigate()
 
@@ -27,20 +43,45 @@ export default function Sign() {
     }));
   }
 
-  console.log({ data });
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    const res = await registerAkun(data)
+    if (res.status) {
+      handleToast('Berhasil Membuat Akun', 'success')
+      navigate('/')
+      clearInput()
+    } else {
+      handleToast(res.message, 'warning')
+    }
+    setIsLoading(false)
+
+  }
+
 
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-900 flex flex-col justify-center items-center gap-6 text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
+      <ToastContainer />
       <div className="w-[90%] h-max  flex flex-col items-center gap-6">
         <div className="text-center">
           <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Insatagram</h1>
         </div>
-        <form action="" className="w-full  flex flex-col gap-4 items-center h-max ">
+        <form onSubmit={handleSubmit} className="w-full  flex flex-col gap-4 items-center h-max ">
           <div className="w-[90%] ">
             <input
-              name='nama'
-              value={data.nama}
+              name='username'
+              value={data.username}
+              onChange={handleInput}
+              type="text"
+              className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
+              placeholder="Username"
+            />
+          </div>
+          <div className="w-[90%] ">
+            <input
+              name='nama_pengguna'
+              value={data.nama_pengguna}
               onChange={handleInput}
               type="text"
               className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
@@ -59,13 +100,13 @@ export default function Sign() {
           </div>
           <div className="w-[90%] h-max bg-zinc-600 rounded-md flex justify-around items-center py-3">
             <input
-              name='kata_sandi'
-              value={data.kata_sandi}
+              name='password'
+              value={data.password}
               onChange={handleInput}
 
               type={typePassword}
               className='w-[80%]  outline-none  text-[.8rem] rounded-md bg-transparent'
-              placeholder="Kata Sandi"
+              placeholder="Password"
             />
             {typePassword == 'password' ? (
               <FaEyeSlash className='text-[1.2rem] cursor-pointer text-zinc-400' onClick={handleTypePassword} />
@@ -74,8 +115,12 @@ export default function Sign() {
             )}
           </div>
           <div className="w-[90%]">
-            {data.nama && data.kata_sandi ? (
-              <Button fullWidth size="md" radius='md'>Buat Akun</Button>
+            {data.username && data.password ? (
+              <Button fullWidth size="md" radius='md' type='submit' disabled={isLoading}>
+                {isLoading ? (
+                  <Loader color="green" type="dots" />
+                ) : 'Buat Akun'}
+              </Button>
             ) : (
               <Button className='button' disabled fullWidth size="md" radius='md'>
                 Buat Akun

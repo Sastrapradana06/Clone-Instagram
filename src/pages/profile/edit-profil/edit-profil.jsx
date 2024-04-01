@@ -1,18 +1,30 @@
-import { Flex, Loader } from "@mantine/core";
-import { useRef, useState } from 'react';
+import { Button, Flex, Loader } from "@mantine/core";
+import { useEffect, useRef, useState } from 'react';
 import NavLink from "../../../components/ui/nav-link";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
 import { ToastContainer } from 'react-toastify';
-import { handleToast } from "../../../store/utils";
+import { getCookies, handleToast } from "../../../store/utils";
+import { editUserProfil } from "../../../store/api";
 
 export default function EditProfile() {
-  const [dataUser, updateDataUser] = useAppStore(
-    useShallow((state) => [state.dataUser, state.updateDataUser])
+  const [dataUser, updateDataUser, getUser] = useAppStore(
+    useShallow((state) => [state.dataUser, state.updateDataUser, state.getUser])
   )
-  const [data, setData] = useState(dataUser)
+  const [data, setData] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (dataUser == undefined) {
+      getUser()
+    } else {
+      setData(dataUser)
+    }
+
+  }, [dataUser])
+
+
 
 
   const handleInput = (e) => {
@@ -32,17 +44,34 @@ export default function EditProfile() {
     console.log({ file });
   }
 
-  const updateProfil = (e) => {
-    setIsLoading(true)
+  const updateProfil = async (e) => {
     e.preventDefault()
-    setTimeout(() => {
-      updateDataUser(data)
-      setIsLoading(false)
-    }, 3000)
-    handleToast("Profil berhasil di edit", 'success')
-  }
+    setIsLoading(true)
 
-  console.log({ data, dataUser });
+    const dataByCookies = getCookies('user_data')
+    const userData = JSON.parse(dataByCookies)
+
+    const newDataUser = {
+      id: userData.id,
+      newData: {
+        pengikut: userData.pengikut,
+        mengikuti: userData.mengikuti,
+        email: userData.email,
+        password: userData.password,
+        ...data
+      }
+    }
+
+    const res = await editUserProfil(newDataUser)
+    if (res.status) {
+      handleToast("Profil berhasil di edit", 'success')
+      updateDataUser(res.data)
+    } else {
+      handleToast(res.message, 'warning')
+    }
+
+    setIsLoading(false)
+  }
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
@@ -65,29 +94,26 @@ export default function EditProfile() {
           <form className="w-full h-max flex gap-4 flex-col" onSubmit={updateProfil}>
             <Flex className="w-full h-max" direction={'column'}>
               <label htmlFor="username" className="text-[.8rem] text-zinc-400">Username</label>
-              <input type="text" className="w-full bg-transparent border-b outline-none" name="username" onChange={handleInput} value={data.username} />
+              <input type="text" className="w-full bg-transparent border-b outline-none" name="username" onChange={handleInput} value={data?.username} />
             </Flex>
             <Flex className="w-full h-max" direction={'column'}>
               <label htmlFor="nama_pengguna" className="text-[.8rem] text-zinc-400">Nama Pengguna</label>
-              <input type="text" className="w-full bg-transparent border-b outline-none" name="nama_pengguna" onChange={handleInput} value={data.nama_pengguna} />
+              <input type="text" className="w-full bg-transparent border-b outline-none" name="nama_pengguna" onChange={handleInput} value={data?.nama_pengguna} />
             </Flex>
             <Flex className="w-full h-max" direction={'column'}>
               <label htmlFor="bio" className="text-[.8rem] text-zinc-400">Bio</label>
-              <input type="text" className="w-full bg-transparent border-b outline-none" name="bio" onChange={handleInput} value={data.bio} />
+              <input type="text" className="w-full bg-transparent border-b outline-none" name="bio" onChange={handleInput} value={data?.bio} />
             </Flex>
             <Flex className="w-full h-max" direction={'column'}>
               <label htmlFor="tautan" className="text-[.8rem] text-zinc-400">Tautan</label>
-              <input type="text" className="w-full bg-transparent border-b outline-none text-sky-500" name="tautan" onChange={handleInput} value={data.tautan} />
+              <input type="text" className="w-full bg-transparent border-b outline-none text-sky-500" name="tautan" onChange={handleInput} value={data?.tautan} />
             </Flex>
             <div className="w-full">
-              {isLoading ? (
-                <Loader color="green" type="dots" />
-              ) : (
-                <button className="py-1 px-3 bg-sky-700 rounded-md text-[.9rem] hover:bg-sky-800" type="submit">
-                  Ubah
-                </button>
-
-              )}
+              <Button size="sm" radius='md' type='submit' disabled={isLoading}>
+                {isLoading ? (
+                  <Loader color="green" type="dots" />
+                ) : 'Ubah'}
+              </Button>
             </div>
           </form>
         </Flex>

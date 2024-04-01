@@ -2,15 +2,26 @@ import { useState } from 'react';
 import './App.css'
 import { FaEyeSlash } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
-import { Button } from '@mantine/core';
+import { Button, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { loginAkun } from './store/api';
+import { ToastContainer } from 'react-toastify';
+import { createCookies, generateToken, handleToast } from './store/utils';
+import { useShallow } from 'zustand/react/shallow'
+import useAppStore from './store/store';
+
+
 
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(false)
   const [typePassword, setTypePassword] = useState('password')
+  const [updateDataUser] = useAppStore(
+    useShallow((state) => [state.updateDataUser])
+  )
   const [data, setData] = useState({
-    nama: '',
-    kata_sandi: ''
+    nama_pengguna: '',
+    password: ''
   })
 
   const navigate = useNavigate()
@@ -27,18 +38,48 @@ export default function App() {
     }));
   }
 
+  const clearInput = () => {
+    const clear = {
+      nama_pengguna: '',
+      password: ''
+    }
+    setData(clear)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    const res = await loginAkun(data)
+    if (res.status) {
+      const token = generateToken()
+      const { data } = res
+      const userString = JSON.stringify(data);
+      updateDataUser(data.data)
+      createCookies('token', token)
+      createCookies('user_data', userString)
+      handleToast('Berhasil Login', 'success')
+      clearInput()
+      navigate('/home')
+    } else {
+      handleToast(res.message, 'error')
+    }
+    setIsLoading(false)
+  }
+
+
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-900 flex flex-col justify-center items-center gap-6 text-white" >
+      <ToastContainer />
       <div className="w-[90%] h-max  flex flex-col items-center gap-6">
         <div className="text-center">
           <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Insatagram</h1>
         </div>
-        <form action="" className="w-full  flex flex-col gap-4 items-center h-max ">
+        <form onSubmit={handleSubmit} className="w-full  flex flex-col gap-4 items-center h-max ">
           <div className="w-[90%] ">
             <input
-              name='nama'
-              value={data.nama}
+              name='nama_pengguna'
+              value={data.nama_pengguna}
               onChange={handleInput}
               type="text"
               className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
@@ -47,10 +88,9 @@ export default function App() {
           </div>
           <div className="w-[90%] h-max bg-zinc-600 rounded-md flex justify-around items-center py-3">
             <input
-              name='kata_sandi'
-              value={data.kata_sandi}
+              name='password'
+              value={data.password}
               onChange={handleInput}
-
               type={typePassword}
               className='w-[80%]  outline-none  text-[.8rem] rounded-md bg-transparent'
               placeholder="Kata Sandi"
@@ -62,8 +102,12 @@ export default function App() {
             )}
           </div>
           <div className="w-[90%]">
-            {data.nama && data.kata_sandi ? (
-              <Button fullWidth size="md" radius='md' onClick={() => navigate('/home')}>Masuk</Button>
+            {data.nama_pengguna && data.password ? (
+              <Button fullWidth size="md" radius='md' type='submit' disabled={isLoading}>
+                {isLoading ? (
+                  <Loader color="green" type="dots" />
+                ) : 'Masuk'}
+              </Button>
             ) : (
               <Button className='button' disabled fullWidth size="md" radius='md'>
                 Masuk

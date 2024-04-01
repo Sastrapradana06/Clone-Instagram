@@ -16,6 +16,9 @@ export default function UserProfile() {
     useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser])
   )
 
+  console.log({ dataUser });
+
+
   const [data, setData] = useState()
 
   const dataStatusUser = [
@@ -79,7 +82,7 @@ export default function UserProfile() {
           <>
             <Flex className="w-full h-max m-auto  mt-4" justify={'space-between'} gap={'md'} align={'center'}>
               <div className="w-max h-max">
-                <img src={dataUser.imgProfil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" />
+                <img src={dataUser.img_profil == "" ? '/icon.jfif' : dataUser.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" />
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">

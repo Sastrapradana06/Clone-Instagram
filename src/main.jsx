@@ -5,6 +5,7 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate
 } from "react-router-dom";
 import '@mantine/core/styles.css';
 
@@ -18,6 +19,16 @@ import EditProfile from './pages/profile/edit-profil/edit-profil.jsx';
 import PostinganUser from './pages/profile/postingan-user/postingan-user.jsx';
 import PostinganSearch from './pages/search/postingan/postingan.jsx';
 import CreatePostingan from './pages/create/create-postingan.jsx';
+import { getCookies } from './store/utils.js';
+
+// eslint-disable-next-line react/prop-types, react-refresh/only-export-components
+function PrivatePage({ children }) {
+  const isToken = getCookies('token')
+  if (isToken) {
+    return children
+  }
+  return <Navigate to="/" replace={true} />
+}
 
 const router = createBrowserRouter([
   {
@@ -30,7 +41,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Home />,
+    element: <PrivatePage>
+      <Home />
+    </PrivatePage>,
   },
   {
     path: "/search",
@@ -61,6 +74,8 @@ const router = createBrowserRouter([
     element: <CreatePostingan />,
   },
 ])
+
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <MantineProvider>

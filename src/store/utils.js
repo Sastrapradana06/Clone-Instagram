@@ -1,6 +1,8 @@
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify';
+import Cookies from 'js-cookie';
+
 
 export function formatPengikut(pengikut) {
   if (pengikut >= 1000) {
@@ -18,7 +20,7 @@ export function formatPengikut(pengikut) {
 
 export const handleToast = (message, status) => {
   if(status === 'success') {
-    toast(message, {
+    toast.success(message, {
       position: "top-right",
       autoClose: 1500,
       hideProgressBar: false,
@@ -26,7 +28,7 @@ export const handleToast = (message, status) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "light",
+      theme: "dark",
       transition: Bounce,
     });
   } else if(status === 'info') {
@@ -38,7 +40,7 @@ export const handleToast = (message, status) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "light",
+      theme: "dark",
       transition: Bounce,
     });
   } else if(status === 'warning') {
@@ -50,7 +52,7 @@ export const handleToast = (message, status) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "light",
+      theme: "dark",
       transition: Bounce,
     });
   } else {
@@ -62,8 +64,31 @@ export const handleToast = (message, status) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "light",
+      theme: "dark",
       transition: Bounce,
     });
   }
+}
+
+export const generateToken = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let token = '';
+  for (let i = 0; i < 50; i++) {
+    token += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return token;
+};
+
+export const createCookies = (name, value) => {
+  Cookies.set(name, value, { expires: 1, })
+}
+
+export const getCookies = (name) => {
+  return Cookies.get(name)
+}
+
+export const deleteAllCookies = () => {
+  Cookies.remove('token')
+  Cookies.remove('user_data')
 }
