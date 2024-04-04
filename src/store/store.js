@@ -1,5 +1,7 @@
 import { create } from 'zustand'
-import { getUserLogin } from './api';
+import { getPostinganById, getUserLogin } from './api';
+import { getCookies } from './utils';
+
 
 const useAppStore = create((set) => ({
 
@@ -19,6 +21,23 @@ const useAppStore = create((set) => ({
       console.log(error);
     }
   },
+
+  userPostingan : undefined,
+  updateUserPostingan : (data) => set({userPostingan: data}),
+  getUserPostingan: async () => {
+    try {
+      const dataByCookies = getCookies('user_data')
+      const {id} = JSON.parse(dataByCookies)
+      const res = await getPostinganById(id)
+      if(res.status) {
+        set({userPostingan: res.data})
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  resetState : () => set({dataUser: undefined, userPostingan:undefined}),
 
 
 }))

@@ -9,7 +9,7 @@ export default function ReadMore({ text }) {
   };
 
   const words = text.split(' ');
-  const displayText = isExpanded ? text : words.slice(0, 10).join(' ') + '...';
+  const displayText = isExpanded ? text : words.slice(0, 10).join(' ');
 
   return (
     <>

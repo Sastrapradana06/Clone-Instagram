@@ -1,6 +1,6 @@
 import { Flex } from '@mantine/core';
 import { TiUserAdd } from "react-icons/ti";
-import { Button } from '@mantine/core';
+import { Button, Skeleton } from '@mantine/core';
 import { FaPlus } from "react-icons/fa6";
 import ButtonLink from '../../components/ui/button-link';
 import { useShallow } from 'zustand/react/shallow'
@@ -15,9 +15,6 @@ export default function UserProfile() {
   const [isShowStatus, setIsShowStatus, dataUser,] = useAppStore(
     useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser])
   )
-
-  console.log({ dataUser });
-
 
   const [data, setData] = useState()
 
@@ -64,6 +61,36 @@ export default function UserProfile() {
     setIsShowStatus(true)
   }
 
+
+  const SkeletonCard = () => {
+    return (
+      <>
+        <Flex className="w-full h-max m-auto  mt-4" justify={'space-between'} gap={'md'} align={'center'}>
+          <div className="w-max h-max">
+            <Skeleton height={70} circle />
+          </div>
+          <Flex className=" w-[70%] h-max" justify={'space-between'}>
+            <div className="text-center text-[.8rem]">
+              <p className="font-semibold text-[1rem]">4</p>
+              <p>postingan</p>
+            </div>
+            <div className="text-center text-[.8rem]">
+              <p className="font-semibold text-[1rem]">0</p>
+              <p>pengikut</p>
+            </div>
+            <div className="text-center text-[.8rem]">
+              <p className="font-semibold text-[1rem]">0</p>
+              <p>mengikuti</p>
+            </div>
+          </Flex>
+        </Flex>
+        <div className="w-[100%] h-max text-[.9rem] ">
+          <Skeleton height={35} mt={'xs'} width="40%" radius="md" />
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       {isShowStatus && (
@@ -105,7 +132,7 @@ export default function UserProfile() {
               <a href={dataUser.tautan} className='text-sky-300 text-[.8rem]' style={{ fontFamily: 'Poppins', fontWeight: 400 }}>{dataUser.tautan}</a>
             </div>
           </>
-        ) : null}
+        ) : <SkeletonCard />}
         <Flex className="w-full h-max mt-2" justify={'space-between'} align={'center'}>
           <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/edit-profile' title='Edit Profil' />
           <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/bagikan-profile' title='Bagikan Profil' />

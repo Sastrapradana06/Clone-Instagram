@@ -55,7 +55,7 @@ export const handleToast = (message, status) => {
       theme: "dark",
       transition: Bounce,
     });
-  } else {
+  } else if(status=== 'error') {
     toast.error(message, {
       position: "top-right",
       autoClose: 1500,
@@ -67,6 +67,18 @@ export const handleToast = (message, status) => {
       theme: "dark",
       transition: Bounce,
     });
+  } else {
+    toast(message, {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
   }
 }
 
@@ -75,6 +87,16 @@ export const generateToken = () => {
   const charactersLength = characters.length;
   let token = '';
   for (let i = 0; i < 50; i++) {
+    token += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return token;
+};
+
+export const generateRandomString = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let token = '';
+  for (let i = 0; i < 5; i++) {
     token += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return token;

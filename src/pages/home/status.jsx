@@ -4,8 +4,8 @@ import { useState } from 'react';
 import CardStatus from '../../components/ui/card-status';
 
 export default function Status() {
-  const [isShowStatus, setIsShowStatus] = useAppStore(
-    useShallow((state) => [state.isShowStatus, state.setIsShowStatus])
+  const [isShowStatus, setIsShowStatus, dataUser] = useAppStore(
+    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser])
   )
   const [data, setData] = useState()
 
@@ -49,7 +49,7 @@ export default function Status() {
         </div>
       )}
       <div className="w-[70px] h-[70px] rounded-full border-2 inline-block mr-4">
-        <img src="https://i.pinimg.com/564x/c0/18/31/c0183163ba468401a02ae53b2665daa1.jpg" alt="img" className="w-full h-full rounded-full" />
+        <img src={dataUser?.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
       </div>
       {dataStatus ? (
         dataStatus.map((item) => {

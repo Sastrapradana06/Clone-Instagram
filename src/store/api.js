@@ -69,3 +69,63 @@ export const getUserLogin =  async () => {
     return error
   }
 }
+
+// + Posting
+export const posting = async (data) => {
+  try {
+    const res = await fetch(`${endpoint}/posting`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getPostinganById = async (id) => {
+  try {
+    const res = await fetch(`${endpoint}/posting/get-postingan/${id}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const handleLovePostingan = async (data) => {
+  try {
+    const res = await fetch(`${endpoint}/posting/love`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const deletePostingan = async (id) => {
+  try {
+    const res = await fetch(`${endpoint}/posting/delete/${id}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+

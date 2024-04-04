@@ -4,8 +4,9 @@ import NavLink from "../../../components/ui/nav-link";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
 import { ToastContainer } from 'react-toastify';
-import { getCookies, handleToast } from "../../../store/utils";
+import { createCookies, getCookies, handleToast } from "../../../store/utils";
 import { editUserProfil } from "../../../store/api";
+import { uploadImages } from "../../../store/db";
 
 export default function EditProfile() {
   const [dataUser, updateDataUser, getUser] = useAppStore(
@@ -13,7 +14,11 @@ export default function EditProfile() {
   )
   const [data, setData] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingFoto, setIsLoadingFoto] = useState(false)
   const fileInputRef = useRef(null);
+
+  const dataByCookies = getCookies('user_data')
+  const userData = JSON.parse(dataByCookies)
 
   useEffect(() => {
     if (dataUser == undefined) {
@@ -21,7 +26,6 @@ export default function EditProfile() {
     } else {
       setData(dataUser)
     }
-
   }, [dataUser])
 
 
@@ -39,17 +43,22 @@ export default function EditProfile() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
-    const file = URL.createObjectURL(e.target.files[0]);
-    console.log({ file });
+  const handleFileChange = async (e) => {
+    setIsLoadingFoto(true)
+    const file = e.target.files[0]
+    const result = await uploadImages(file, userData.id, userData.data.nama_pengguna)
+    if (result) {
+      setData((prev) => ({
+        ...prev,
+        img_profil: result
+      }))
+    }
+    setIsLoadingFoto(false)
   }
 
   const updateProfil = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-
-    const dataByCookies = getCookies('user_data')
-    const userData = JSON.parse(dataByCookies)
 
     const newDataUser = {
       id: userData.id,
@@ -66,12 +75,18 @@ export default function EditProfile() {
     if (res.status) {
       handleToast("Profil berhasil di edit", 'success')
       updateDataUser(res.data)
+      console.log({ res });
+      const userString = JSON.stringify({ id: newDataUser.id, data: res.data });
+      createCookies('user_data', userString)
     } else {
       handleToast(res.message, 'warning')
     }
 
     setIsLoading(false)
   }
+
+
+  // console.log({ data, dataUser });
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
@@ -80,8 +95,13 @@ export default function EditProfile() {
       {dataUser && (
         <Flex className="w-[90%] h-max m-auto pt-20" direction={'column'} gap={'xs'} align={'center'}>
           <Flex className="w-max h-max  text-white" direction={'column'} align={'center'} gap={'sm'}>
-            <img src={dataUser.imgProfil} alt="user" className="w-[70px] h-[70px] rounded-full border" />
-            <button className="text-sky-500 text-[.9rem] font-semibold" onClick={handleClick}>Edit foto</button>
+            <img src={data?.img_profil == "" ? '/icon.jfif' : data?.img_profil} alt="user" className="w-[80px] h-[80px] rounded-full border object-cover" />
+            <Button size="xs" radius='md' type='submit' color="green" variant="outline" onClick={handleClick}>
+              {isLoadingFoto ? (
+                <Loader color="green" type="dots" />
+              ) : 'Ganti Foto'}
+            </Button>
+
             <input
               type="file"
               id="file-input"

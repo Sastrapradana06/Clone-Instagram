@@ -1,8 +1,8 @@
 import AppShell from "../../components/layout/app-shell";
 // import { Flex } from '@mantine/core';
 import NavProfile from "./nav-profile";
+import PostinganUser from "./postingan_user";
 import UserProfile from "./user-profile";
-import UserStatus from "./user-status";
 
 
 export default function Profile() {
@@ -11,7 +11,7 @@ export default function Profile() {
       <div className="w-full h-max">
         <NavProfile />
         <UserProfile />
-        <UserStatus />
+        <PostinganUser />
       </div>
     </AppShell>
   )
