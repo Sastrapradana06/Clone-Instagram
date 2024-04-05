@@ -40,6 +40,39 @@ export const registerAkun = async (data) => {
 }
 
 // + User
+export const getUser =  async () => {
+  try {
+    const res = await fetch(`${endpoint}/user/`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getUserByNamaPengguna =  async (nama_pengguna) => {
+  try {
+    const res = await fetch(`${endpoint}/user/get/${nama_pengguna}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getUserIncludeNamaPengguna =  async (nama_pengguna) => {
+  try {
+    const res = await fetch(`${endpoint}/user/pengguna/${nama_pengguna}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
 export const editUserProfil = async (data) => {
   try {
     const res = await fetch(`${endpoint}/user/edit-user`, {

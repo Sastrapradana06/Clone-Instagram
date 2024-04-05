@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { generateRandomString } from "./utils";
 
 const firebaseConfig = {
@@ -59,3 +59,13 @@ export const uploadPostingan = async (file, nama_pengguna) => {
   }
 
 }
+
+export const deleteImage = async (path) => {
+  const imageRef = ref(storage, path); 
+  try {
+    await deleteObject(imageRef);
+    return { success: true, message: 'File gambar berhasil dihapus' };
+  } catch (error) {
+    return { success: false, message: 'Gagal menghapus file gambar' };
+  }
+};

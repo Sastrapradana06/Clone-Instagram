@@ -14,6 +14,7 @@ import { useState } from 'react';
 import ShowModal from './modal';
 import { deletePostingan } from '../../store/api';
 import { useNavigate } from "react-router-dom";
+import { deleteImage } from '../../store/db';
 
 
 
@@ -32,6 +33,7 @@ export default function CardPostingan(...props) {
   const handleDelete = async () => {
     const res = await deletePostingan(uniqueKey)
     if (res.status) {
+      await deleteImage(postImageUrl)
       await getUserPostingan()
       setIsModal(false)
       navigate('/profile')

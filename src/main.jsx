@@ -20,6 +20,7 @@ import PostinganSearch from './pages/search/postingan/postingan.jsx';
 import CreatePostingan from './pages/create/create-postingan.jsx';
 import { getCookies } from './store/utils.js';
 import DetailPostinganUser from './pages/profile/detail-postingan/detail.jsx';
+import ProfileByNamaPengguna from './pages/search/profile/profile_pengguna.jsx';
 
 // eslint-disable-next-line react/prop-types, react-refresh/only-export-components
 function PrivatePage({ children }) {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/search",
     element: <Search />,
+  },
+  {
+    path: "/search/:nama_pengguna",
+    element: <ProfileByNamaPengguna />,
   },
   {
     path: "/search/postingan/:id",

@@ -7,6 +7,7 @@ import CardPostingan from "../../../components/ui/card-postingan";
 export default function PostinganSearch() {
   const { id } = useParams()
 
+
   const dataPostinagnUser = [
     {
       id: 1,

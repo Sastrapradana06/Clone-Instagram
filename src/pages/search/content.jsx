@@ -1,9 +1,53 @@
-import { Flex } from '@mantine/core';
+import { Flex, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { IoSearch } from "react-icons/io5";
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import { getUserIncludeNamaPengguna } from '../../store/api';
+import useAppStore from '../../store/store';
+import { useShallow } from 'zustand/react/shallow';
 
 
 export default function Content() {
+  const [data, seData] = useState([])
+  const [value, setValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [debouncedValue] = useDebounce(value, 2000);
+  const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate()
+
+  const [dataUser] = useAppStore(
+    useShallow((state) => [state.dataUser])
+  )
+
+  const handleNavigate = (nama_pengguna) => {
+    if (dataUser.nama_pengguna == nama_pengguna) {
+      navigate('/profile')
+    } else {
+      navigate(`/search/${nama_pengguna}`)
+    }
+  };
+
+  const getUserAll = async () => {
+    console.log('jalan');
+    setIsLoading(true)
+    const res = await getUserIncludeNamaPengguna(value)
+    if (res.status) {
+      seData(res.data)
+    } else {
+      seData([])
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    if (value.length > 2) {
+      getUserAll()
+    }
+
+  }, [debouncedValue])
+
+
 
   const dataPostinagnUser = [
     {
@@ -93,17 +137,51 @@ export default function Content() {
   ]
 
   return (
-    <Flex className="w-full h-max m-auto  mt-2 mb-[60px]" wrap={'wrap'} justify={''}>
-      {dataPostinagnUser ? (
-        dataPostinagnUser.map((item, i) => {
-          return (
-            <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/search/postingan/${item.id}`)}>
-              <img src={item.imgUrl} alt="status" className="w-full h-full object-cover" />
+    <>
+      <Flex className="w-[90%] h-max m-auto px-4 py-1 bg-zinc-700 rounded-xl" align={'center'} gap={'md'}>
+        <IoSearch size={20} />
+        <input
+          type="text"
+          className="bg-transparent w-full outline-none "
+          placeholder="Cari"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+        // onBlur={() => setIsFocused(false)}
+        />
+      </Flex>
+      {isFocused ? (
+        data.length > 0 ? (
+          <Flex className='w-full  m-auto h-max mt-2' direction={'column'} align={'center'}>
+            {data.map((item) => {
+              return (
+                <Flex className='w-[90%] h-max cursor-pointer p-2 hover:bg-zinc-700 rounded-md' align={'center'} gap={'sm'} key={item.nama_pengguna} onClick={() => handleNavigate(item.nama_pengguna)}>
+                  <img src={item.img_profil} alt="img_profil" className='w-[40px] h-[40px] border-2 border-sky-500 object-cover rounded-full' />
+                  <p className='text-[.8rem]' style={{ fontFamily: 'Poppins' }}>{item.nama_pengguna}</p>
+                </Flex>
+              )
+            })}
+          </Flex>
+        ) : (
+          isLoading ? (
+            <div className="w-full h-max flex justify-center">
+              <Loader color="green" type="dots" />
             </div>
-          )
-        })
-      ) : null}
-
-    </Flex>
+          ) : <p className='text-center mt-4 text-[.8rem] text-zinc-300'>Tidak ada nama pengguna yang sama</p>
+        )
+      ) : (
+        <Flex className="w-full h-max m-auto  mt-2 mb-[60px]" wrap={'wrap'} justify={''}>
+          {dataPostinagnUser ? (
+            dataPostinagnUser.map((item, i) => {
+              return (
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => handleNavigate(`postingan/${item.id}`)}>
+                  <img src={item.imgUrl} alt="status" className="w-full h-full object-cover" />
+                </div>
+              )
+            })
+          ) : null}
+        </Flex>
+      )}
+    </>
   )
 }
