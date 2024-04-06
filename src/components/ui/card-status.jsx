@@ -35,7 +35,7 @@ export default function CardStatus({ imgProfil, imgStatus, textStatus, username 
   return (
     <div className="w-full h-max bg-zinc-800 relative text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
       <div className="w-full h-[92vh]">
-        <img src={`${imgStatus}`} alt="img_status" className="w-full h-full object-cover brightness-90" />
+        <img src={`${imgStatus}`} alt="img_status" className="w-full h-full object-cover brightness-90" loading="lazy" />
       </div>
       <Flex className="absolute top-[10px] w-[100%] h-max m-auto z-20 " direction={'column'} align={'center'} gap={'xs'}>
         <div className="w-[93%] h-max">
@@ -43,7 +43,7 @@ export default function CardStatus({ imgProfil, imgStatus, textStatus, username 
         </div>
         <Flex className="w-[90%] h-max" justify={'space-between'} align={'center'}>
           <Flex align={'center'} gap={'sm'}>
-            <img src={`${imgProfil}`} alt="img_profil" className="w-[35px] h-[35px] rounded-full object-cover" />
+            <img src={`${imgProfil}`} alt="img_profil" className="w-[35px] h-[35px] rounded-full object-cover" loading="lazy" />
             <p className="text-[.8rem] font-bold">{username}</p>
           </Flex>
           <AiOutlineMore size={25} color="white" />

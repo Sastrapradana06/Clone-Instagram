@@ -6,7 +6,7 @@ import { TbMessageCircle } from "react-icons/tb";
 import { LuSend } from "react-icons/lu";
 import { HiPencil } from "react-icons/hi";
 import ReadMore from './read-more';
-import { formatPengikut } from '../../store/utils';
+import { formatPengikut, getCookies } from '../../store/utils';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { MdDelete } from "react-icons/md";
@@ -24,14 +24,17 @@ export default function CardPostingan(...props) {
   const [dataUser, getUserPostingan] = useAppStore(
     useShallow((state) => [state.dataUser, state.getUserPostingan])
   )
-  const { key, uniqueKey, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove } = props[0];
+  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove } = props[0];
 
   const jumlahLike = likes?.length
+
+  const cookiesData = getCookies('user_data')
+  const userData = JSON.parse(cookiesData)
 
   const navigate = useNavigate()
 
   const handleDelete = async () => {
-    const res = await deletePostingan(uniqueKey)
+    const res = await deletePostingan(id)
     if (res.status) {
       await deleteImage(postImageUrl)
       await getUserPostingan()
@@ -55,7 +58,7 @@ export default function CardPostingan(...props) {
           <Menu.Item
             color="teal"
             leftSection={<HiPencil style={{ width: rem(14), height: rem(14) }} />}
-            onClick={() => navigate(`/edit-postingan/${uniqueKey}`)}
+            onClick={() => navigate(`/edit-postingan/${id}`)}
           >
             Edit postingan
           </Menu.Item>
@@ -94,7 +97,7 @@ export default function CardPostingan(...props) {
   }
 
   return (
-    <Flex id={`${uniqueKey}`} className="w-full h-max" direction={'column'} align={'center'} style={{ fontFamily: 'Montserrat', fontWeight: 400 }} key={`${key}`}>
+    <Flex id={`${id}`} className="w-full h-max" direction={'column'} align={'center'} style={{ fontFamily: 'Montserrat', fontWeight: 400 }} key={`${key}`}>
       {isModal && (
         <ShowModal>
           <div className="w-[90%] bg-zinc-700 shadow-xl flex flex-col items-center gap-4 text-white p-2 rounded-md border-red-500 border">
@@ -111,11 +114,11 @@ export default function CardPostingan(...props) {
       )}
       <Flex className="w-[90%] h-[50px]" justify={'space-between'} align={'center'}>
         <Flex className="w-max" align={'center'} gap={'sm'}>
-          <img src={`${profileImageUrl}`} alt="pp" className="w-[40px] h-[40px] rounded-full border-2 border-sky-800 object-cover" />
+          <img src={`${profileImageUrl}`} alt="pp" loading='lazy' className="w-[40px] h-[40px] rounded-full border-2 border-sky-800 object-cover" />
           <p className="text-[.9rem]">{nama_pengguna}</p>
         </Flex>
         <div className="w-max h-max">
-          {nama_pengguna == dataUser?.nama_pengguna ? (
+          {user_id == userData?.id ? (
             <MenuComponentUser />
           ) : (
             <MenuComponentPublic />
@@ -128,8 +131,8 @@ export default function CardPostingan(...props) {
       <Flex className="w-[90%] h-[50px]" justify={'space-between'} align={'center'}>
         <Flex className="w-max" align={'center'} gap={'sm'}>
           {likes.includes(dataUser?.nama_pengguna) ? (
-            <FaHeart size={24} color="crimson" className='cursor-pointer' onClick={() => handleLove(uniqueKey)} />
-          ) : <FaRegHeart size={24} color="white" onClick={() => handleLove(uniqueKey)} className='cursor-pointer' />}
+            <FaHeart size={24} color="crimson" className='cursor-pointer' onClick={() => handleLove(id)} />
+          ) : <FaRegHeart size={24} color="white" onClick={() => handleLove(id)} className='cursor-pointer' />}
           <TbMessageCircle size={24} color="white" />
           <LuSend size={24} color="white" />
         </Flex>

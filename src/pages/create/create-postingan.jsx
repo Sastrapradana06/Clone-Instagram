@@ -1,13 +1,13 @@
 import NavLink from "../../components/ui/nav-link";
 import { Flex, Button, Loader } from "@mantine/core";
 import { useEffect, useRef, useState } from 'react';
-import { getCookies, handleToast } from "../../store/utils";
+import { getCookies } from "../../store/utils";
 import { uploadPostingan } from "../../store/db";
 import { posting } from "../../store/api";
-import { ToastContainer } from 'react-toastify';
 import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { useNavigate, useParams } from "react-router-dom";
+import Notification from "../../components/ui/notification";
 
 
 export default function CreatePostingan() {
@@ -18,6 +18,14 @@ export default function CreatePostingan() {
   const [dataEdit, setDataEdit] = useState('')
   const [deskripsi, setDeskripsi] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  const [status, setStatus] = useState(false)
+  const [title, setTitle] = useState(false)
+
+  const handleNotif = (status, title) => {
+    setStatus(status)
+    setTitle(title)
+  }
 
   const { id } = useParams()
 
@@ -34,11 +42,10 @@ export default function CreatePostingan() {
   }, [id])
 
   const editPostingan = () => {
-    const filterPostingan = userPostingan?.filter((data) => {
+    const filterPostingan = userPostingan.filter((data) => {
       return data.id == id
     })
-
-    if (filterPostingan) {
+    if (filterPostingan.length > 0) {
       const { data } = filterPostingan[0]
       setUrlImgStatus(data.img_url)
       setDeskripsi(data.deskripsi)
@@ -88,7 +95,7 @@ export default function CreatePostingan() {
 
     const res = await posting(data)
     if (res.status) {
-      handleToast(res.message, 'success')
+      handleNotif('success', 'Berhasil Membuat Postingan')
       getUserPostingan()
       setDeskripsi('')
       setUrlImgStatus('')
@@ -98,7 +105,7 @@ export default function CreatePostingan() {
         navigate('/profile')
       }
     } else {
-      handleToast(res.message, 'warning')
+      handleNotif('error', 'Gagal membuat postingan')
     }
     setIsLoading(false)
   }
@@ -106,15 +113,15 @@ export default function CreatePostingan() {
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex justify-center items-center flex-col">
-      <ToastContainer />
+      <Notification status={status} title={title} />
       <NavLink title={'Buat Postingan'} url={'/home'} />
       <Flex className="w-full h-max m-auto pt-20 pb-5" direction={'column'} gap={'md'} align={'center'}>
         <Flex className="w-full h-max  text-white" direction={'column'} align={'center'} gap={'sm'}>
           {urlImgStatus ? (
-            <img src={urlImgStatus} alt="user" className="w-[90%] h-[400px]  border object-cover" />
+            <img src={urlImgStatus} alt="user" className="w-[90%] h-[400px]  border object-cover" loading="lazy" />
           ) : null}
           {!id && (
-            <Button variant="light" color="green" onClick={handleClick}>{urlImgStatus ? 'Ganti Foto' : 'Upload foto'}</Button>
+            <Button variant="light" color="green" disabled={isLoading} onClick={handleClick}>{urlImgStatus ? 'Ganti Foto' : 'Upload foto'}</Button>
           )}
           <input
             type="file"

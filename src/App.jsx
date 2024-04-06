@@ -5,13 +5,10 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Button, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { loginAkun } from './store/api';
-import { ToastContainer } from 'react-toastify';
-import { createCookies, generateToken, handleToast } from './store/utils';
+import { createCookies, generateToken } from './store/utils';
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from './store/store';
-
-
-
+import Notification from './components/ui/notification';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -23,6 +20,14 @@ export default function App() {
     nama_pengguna: '',
     password: ''
   })
+
+  const [status, setStatus] = useState(false)
+  const [title, setTitle] = useState(false)
+
+  const handleNotif = (status, title) => {
+    setStatus(status)
+    setTitle(title)
+  }
 
   const navigate = useNavigate()
 
@@ -57,11 +62,11 @@ export default function App() {
       updateDataUser(data.data)
       createCookies('token', token)
       createCookies('user_data', userString)
-      handleToast('Berhasil Login', 'success')
+      handleNotif('success', 'Anda Berhasil Login')
       clearInput()
       navigate('/home')
     } else {
-      handleToast(res.message, 'error')
+      handleNotif('error', res.message)
     }
     setIsLoading(false)
   }
@@ -70,7 +75,7 @@ export default function App() {
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-900 flex flex-col justify-center items-center gap-6 text-white" >
-      <ToastContainer />
+      <Notification status={status} title={title} />
       <div className="w-[90%] h-max  flex flex-col items-center gap-6">
         <div className="text-center">
           <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Insatagram</h1>

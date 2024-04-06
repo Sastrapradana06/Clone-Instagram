@@ -109,7 +109,7 @@ export default function UserProfile() {
           <>
             <Flex className="w-full h-max m-auto  mt-4" justify={'space-between'} gap={'md'} align={'center'}>
               <div className="w-max h-max">
-                <img src={dataUser.img_profil == "" ? '/icon.jfif' : dataUser.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" />
+                <img src={dataUser.img_profil == "" ? '/icon.jfif' : dataUser.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" loading='lazy' />
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">
@@ -145,7 +145,7 @@ export default function UserProfile() {
             dataStatusUser.map((item, i) => {
               return (
                 <div className="inline-block w-max h-max  flex-none text-center cursor-pointer" key={i} onClick={() => showStatus(item)}>
-                  <img src={item.imgUrl} alt="cantik" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" />
+                  <img src={item.imgUrl} alt="cantik" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading='lazy' />
                   <p className='text-[.7rem] mt-1'>{item.textStatus}</p>
                 </div>
               )
@@ -166,7 +166,7 @@ export default function UserProfile() {
                 return (
                   <div className="inline-block w-[150px] h-[200px] border border-zinc-800 rounded-md mr-1 p-1 flex-none" key={i}>
                     <Flex className="w-full h-full m-auto" direction={'column'} justify={'center'} align={'center'} gap={'sm'}>
-                      <img src={item.urlImgProfile} alt="cantik" className="object-cover w-[80px] h-[80px] rounded-full" />
+                      <img src={item.urlImgProfile} alt="cantik" className="object-cover w-[80px] h-[80px] rounded-full" loading='lazy' />
                       <p className="text-[.9rem] font-semibold capitalize">{item.username}</p>
                       <Button fullWidth variant="filled" size="xs" radius={'md'}>Ikuti</Button>
                     </Flex>

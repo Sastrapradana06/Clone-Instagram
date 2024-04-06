@@ -6,14 +6,12 @@ import CardPostingan from "../../../components/ui/card-postingan";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
 import { handleLovePostingan } from "../../../store/api";
-import { ToastContainer } from 'react-toastify';
-import { handleToast } from "../../../store/utils";
 
 
 
 export default function DetailPostinganUser() {
-  const [userPostingan, dataUser, getUserPostingan] = useAppStore(
-    useShallow((state) => [state.userPostingan, state.dataUser, state.getUserPostingan])
+  const [userPostingan, dataUser, updateUserPostingan] = useAppStore(
+    useShallow((state) => [state.userPostingan, state.dataUser, state.updateUserPostingan])
   )
   const { id } = useParams()
 
@@ -32,24 +30,35 @@ export default function DetailPostinganUser() {
     const data = { id, nama_pengguna: dataUser.nama_pengguna }
     const res = await handleLovePostingan(data)
     if (res.status) {
-      handleToast(res.message, '')
-      getUserPostingan()
-    } else {
-      handleToast(res.message, 'error')
+      const newData = userPostingan.map((item) => {
+        if (item.id == res.data.id) {
+          return {
+            ...item,
+            data: {
+              ...item.data,
+              love: res.data.love
+            }
+          }
+        }
+
+        return item;
+      })
+      updateUserPostingan(newData)
+
     }
   }
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
-      <ToastContainer />
       <NavLink title={'Postingan'} url={'/profile'} />
       <Flex className="w-full h-max pt-[4rem]  pb-2" direction={'column'} gap={'md'}>
         {userPostingan ? (
-          userPostingan.map((item) => {
+          userPostingan.map((item, i) => {
             return (
               <CardPostingan
-                key={item.id}
-                uniqueKey={item.id}
+                key={i}
+                id={item.id}
+                user_id={item.data.user_id}
                 profileImageUrl={item.data.img_profil}
                 nama_pengguna={item.data.nama_pengguna}
                 postImageUrl={item.data.img_url}

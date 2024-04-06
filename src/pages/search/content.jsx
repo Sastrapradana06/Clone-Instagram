@@ -6,6 +6,8 @@ import { useDebounce } from 'use-debounce';
 import { getUserIncludeNamaPengguna } from '../../store/api';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
+import { FaArrowLeftLong } from "react-icons/fa6";
+
 
 
 export default function Content() {
@@ -29,7 +31,6 @@ export default function Content() {
   };
 
   const getUserAll = async () => {
-    console.log('jalan');
     setIsLoading(true)
     const res = await getUserIncludeNamaPengguna(value)
     if (res.status) {
@@ -139,7 +140,7 @@ export default function Content() {
   return (
     <>
       <Flex className="w-[90%] h-max m-auto px-4 py-1 bg-zinc-700 rounded-xl" align={'center'} gap={'md'}>
-        <IoSearch size={20} />
+        {!isFocused ? <IoSearch size={20} /> : <FaArrowLeftLong size={20} className='text-white cursor-pointer' onClick={() => setIsFocused(false)} />}
         <input
           type="text"
           className="bg-transparent w-full outline-none "
@@ -147,7 +148,6 @@ export default function Content() {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onFocus={() => setIsFocused(true)}
-        // onBlur={() => setIsFocused(false)}
         />
       </Flex>
       {isFocused ? (
@@ -156,7 +156,7 @@ export default function Content() {
             {data.map((item) => {
               return (
                 <Flex className='w-[90%] h-max cursor-pointer p-2 hover:bg-zinc-700 rounded-md' align={'center'} gap={'sm'} key={item.nama_pengguna} onClick={() => handleNavigate(item.nama_pengguna)}>
-                  <img src={item.img_profil} alt="img_profil" className='w-[40px] h-[40px] border-2 border-sky-500 object-cover rounded-full' />
+                  <img src={item.img_profil} alt="img_profil" className='w-[40px] h-[40px] border-2 border-sky-500 object-cover rounded-full' loading='lazy' />
                   <p className='text-[.8rem]' style={{ fontFamily: 'Poppins' }}>{item.nama_pengguna}</p>
                 </Flex>
               )
@@ -175,7 +175,7 @@ export default function Content() {
             dataPostinagnUser.map((item, i) => {
               return (
                 <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => handleNavigate(`postingan/${item.id}`)}>
-                  <img src={item.imgUrl} alt="status" className="w-full h-full object-cover" />
+                  <img src={item.imgUrl} alt="status" className="w-full h-full object-cover" loading='lazy' />
                 </div>
               )
             })

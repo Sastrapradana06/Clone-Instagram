@@ -12,9 +12,7 @@ export default function PostinganUser() {
   )
 
   useEffect(() => {
-    if (userPostingan == undefined) {
-      getUserPostingan()
-    }
+    getUserPostingan()
   }, [userPostingan])
 
 

@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import NavLink from "../../../components/ui/nav-link";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
-import { ToastContainer } from 'react-toastify';
-import { createCookies, getCookies, handleToast } from "../../../store/utils";
+import { createCookies, getCookies } from "../../../store/utils";
 import { editUserProfil } from "../../../store/api";
 import { uploadImages } from "../../../store/db";
+import Notification from "../../../components/ui/notification";
 
 export default function EditProfile() {
   const [dataUser, updateDataUser, getUser] = useAppStore(
@@ -19,6 +19,14 @@ export default function EditProfile() {
 
   const dataByCookies = getCookies('user_data')
   const userData = JSON.parse(dataByCookies)
+
+  const [status, setStatus] = useState(false)
+  const [title, setTitle] = useState(false)
+
+  const handleNotif = (status, title) => {
+    setStatus(status)
+    setTitle(title)
+  }
 
   useEffect(() => {
     if (dataUser == undefined) {
@@ -73,24 +81,21 @@ export default function EditProfile() {
 
     const res = await editUserProfil(newDataUser)
     if (res.status) {
-      handleToast("Profil berhasil di edit", 'success')
+      handleNotif('success', 'Profil berhasil diedit')
       updateDataUser(res.data)
       console.log({ res });
       const userString = JSON.stringify({ id: newDataUser.id, data: res.data });
       createCookies('user_data', userString)
     } else {
-      handleToast(res.message, 'warning')
+      handleNotif('error', res.message)
     }
 
     setIsLoading(false)
   }
 
-
-  // console.log({ data, dataUser });
-
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
-      <ToastContainer />
+      <Notification status={status} title={title} />
       <NavLink title={'Edit Profil'} url={'/profile'} />
       {dataUser && (
         <Flex className="w-[90%] h-max m-auto pt-20" direction={'column'} gap={'xs'} align={'center'}>
