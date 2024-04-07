@@ -122,7 +122,7 @@ export const deleteAllCookies = () => {
 }
 
 
-export function formatFirestoreTimestamp(timestampFirestore) {
+export const formatFirestoreTimestamp = (timestampFirestore) => {
   const timestampDate = new Date(timestampFirestore._seconds * 1000 + timestampFirestore._nanoseconds / 1000000);
 
   const diffMilliseconds = Date.now() - timestampDate.getTime();
