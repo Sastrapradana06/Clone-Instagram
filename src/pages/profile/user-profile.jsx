@@ -12,18 +12,19 @@ import { formatPengikut } from '../../store/utils';
 
 
 export default function UserProfile() {
-  const [isShowStatus, setIsShowStatus, dataUser,] = useAppStore(
-    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser])
+  const [isShowStatus, setIsShowStatus, dataUser, userPostingan] = useAppStore(
+    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userPostingan])
   )
 
   const [data, setData] = useState()
+  const [isPeople, setIsPeople] = useState(false)
 
   const dataStatusUser = [
-    {
-      id: 1,
-      imgUrl: 'https://i.pinimg.com/564x/9b/77/e9/9b77e9bbbb7c76837d67e44a98c01c5d.jpg',
-      textStatus: '💙'
-    },
+    // {
+    //   id: 1,
+    //   imgUrl: 'https://i.pinimg.com/564x/9b/77/e9/9b77e9bbbb7c76837d67e44a98c01c5d.jpg',
+    //   textStatus: '💙'
+    // },
     {
       id: 2,
       imgUrl: 'https://i.pinimg.com/564x/ec/d3/6b/ecd36bed10f5e06bdf1ef966031c0e03.jpg',
@@ -113,15 +114,15 @@ export default function UserProfile() {
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">4</p>
+                  <p className="font-semibold text-[1rem]">{userPostingan ? formatPengikut(userPostingan.length) : 0}</p>
                   <p>postingan</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.pengikut)}</p>
+                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.pengikut.length)}</p>
                   <p>pengikut</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.mengikuti)}</p>
+                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.mengikuti.length)}</p>
                   <p>mengikuti</p>
                 </div>
               </Flex>
@@ -136,7 +137,7 @@ export default function UserProfile() {
         <Flex className="w-full h-max mt-2" justify={'space-between'} align={'center'}>
           <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/edit-profile' title='Edit Profil' />
           <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/bagikan-profile' title='Bagikan Profil' />
-          <button className="w-[15%] py-1 bg-zinc-800 text-[.8rem] rounded-lg flex justify-center items-center">
+          <button className="w-[15%] py-1 bg-zinc-800 text-[.8rem] rounded-lg flex justify-center items-center cursor-pointer hover:bg-zinc-900" onClick={() => setIsPeople(prevIsPeople => !prevIsPeople)}>
             <TiUserAdd size={20} fill="white" />
           </button>
         </Flex>
@@ -158,24 +159,26 @@ export default function UserProfile() {
             <p className='text-[.8rem] mt-1'>Baru</p>
           </div>
         </div>
-        <div className="w-full h-max mt-6 ">
-          <p className="text-[.8rem]">Temukan orang</p>
-          <div className="flex overflow-x-scroll  mt-1">
-            {findPeople ? (
-              findPeople.map((item, i) => {
-                return (
-                  <div className="inline-block w-[150px] h-[200px] border border-zinc-800 rounded-md mr-1 p-1 flex-none" key={i}>
-                    <Flex className="w-full h-full m-auto" direction={'column'} justify={'center'} align={'center'} gap={'sm'}>
-                      <img src={item.urlImgProfile} alt="cantik" className="object-cover w-[80px] h-[80px] rounded-full" loading='lazy' />
-                      <p className="text-[.9rem] font-semibold capitalize">{item.username}</p>
-                      <Button fullWidth variant="filled" size="xs" radius={'md'}>Ikuti</Button>
-                    </Flex>
-                  </div>
-                )
-              })
-            ) : null}
+        {isPeople && (
+          <div className="w-full h-max mt-6 ">
+            <p className="text-[.8rem]">Temukan orang</p>
+            <div className="flex overflow-x-scroll  mt-1">
+              {findPeople ? (
+                findPeople.map((item, i) => {
+                  return (
+                    <div className="inline-block w-[150px] h-[200px] border border-zinc-800 rounded-md mr-1 p-1 flex-none" key={i}>
+                      <Flex className="w-full h-full m-auto" direction={'column'} justify={'center'} align={'center'} gap={'sm'}>
+                        <img src={item.urlImgProfile} alt="cantik" className="object-cover w-[80px] h-[80px] rounded-full" loading='lazy' />
+                        <p className="text-[.9rem] font-semibold capitalize">{item.username}</p>
+                        <Button fullWidth variant="filled" size="xs" radius={'md'}>Ikuti</Button>
+                      </Flex>
+                    </div>
+                  )
+                })
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   )

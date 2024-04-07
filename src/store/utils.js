@@ -110,7 +110,41 @@ export const getCookies = (name) => {
   return Cookies.get(name)
 }
 
+export const getUserIdByCookies = () => {
+  const cookiesData = getCookies('user_data')
+  const {id} = JSON.parse(cookiesData)
+  return id
+}
+
 export const deleteAllCookies = () => {
   Cookies.remove('token')
   Cookies.remove('user_data')
 }
+
+
+export function formatFirestoreTimestamp(timestampFirestore) {
+  const timestampDate = new Date(timestampFirestore._seconds * 1000 + timestampFirestore._nanoseconds / 1000000);
+
+  const diffMilliseconds = Date.now() - timestampDate.getTime();
+  const diffMinutes = Math.round(diffMilliseconds / (1000 * 60));
+  const diffHours = Math.round(diffMilliseconds / (1000 * 60 * 60));
+  const diffDays = Math.round(diffMilliseconds / (1000 * 60 * 60 * 24));
+  const diffWeeks = Math.round(diffMilliseconds / (1000 * 60 * 60 * 24 * 7));
+  const diffMonths = Math.round(diffMilliseconds / (1000 * 60 * 60 * 24 * 30));
+
+  let timeAgoText = '';
+  if (diffMinutes < 60) {
+    timeAgoText = `${diffMinutes} menit lalu`;
+  } else if (diffHours < 24) {
+    timeAgoText = `${diffHours} jam lalu`;
+  } else if (diffDays < 7) {
+    timeAgoText = `${diffDays} hari lalu`;
+  } else if (diffWeeks < 4) {
+    timeAgoText = `${diffWeeks} minggu lalu`;
+  } else {
+    timeAgoText = `${diffMonths} bulan lalu`;
+  }
+
+  return timeAgoText;
+}
+

@@ -3,6 +3,7 @@ import { getCookies } from "./utils";
 // const endpoint = 'http://localhost:3000'
 const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
+
 // + Auth 
 export const loginAkun = async (data) => {
   try {
@@ -104,6 +105,24 @@ export const getUserLogin =  async () => {
   }
 }
 
+export const handleIkutiUser = async (data) => {
+  try {
+    const res = await fetch(`${endpoint}/user/ikuti`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
 // + Posting
 export const posting = async (data) => {
   try {
@@ -115,6 +134,17 @@ export const posting = async (data) => {
       body: JSON.stringify(data),
     });
 
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getAllPostingan = async () => {
+  try {
+    const res = await fetch(`${endpoint}/posting/get-postingan`);
     const result = await res.json();
     return result
   } catch (error) {

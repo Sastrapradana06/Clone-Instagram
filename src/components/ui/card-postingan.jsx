@@ -6,7 +6,7 @@ import { TbMessageCircle } from "react-icons/tb";
 import { LuSend } from "react-icons/lu";
 import { HiPencil } from "react-icons/hi";
 import ReadMore from './read-more';
-import { formatPengikut, getCookies } from '../../store/utils';
+import { formatFirestoreTimestamp, formatPengikut, getUserIdByCookies } from '../../store/utils';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { MdDelete } from "react-icons/md";
@@ -24,12 +24,11 @@ export default function CardPostingan(...props) {
   const [dataUser, getUserPostingan] = useAppStore(
     useShallow((state) => [state.dataUser, state.getUserPostingan])
   )
-  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove } = props[0];
+  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time } = props[0];
 
   const jumlahLike = likes?.length
 
-  const cookiesData = getCookies('user_data')
-  const userData = JSON.parse(cookiesData)
+  const idUser = getUserIdByCookies()
 
   const navigate = useNavigate()
 
@@ -118,7 +117,7 @@ export default function CardPostingan(...props) {
           <p className="text-[.9rem]">{nama_pengguna}</p>
         </Flex>
         <div className="w-max h-max">
-          {user_id == userData?.id ? (
+          {user_id == idUser ? (
             <MenuComponentUser />
           ) : (
             <MenuComponentPublic />
@@ -139,7 +138,8 @@ export default function CardPostingan(...props) {
         <FaRegBookmark size={24} color="white" />
       </Flex>
       <Flex className="w-[90%] h-max text-[.8rem]" direction={'column'}>
-        <p className='text-zinc-300'>{formatPengikut(jumlahLike)} suka</p>
+        <p className='font-semibold'>{formatPengikut(jumlahLike)} suka</p>
+        <p className='text-[.8rem] text-zinc-300'>{formatFirestoreTimestamp(time)}</p>
         <ReadMore text={`${statusText}`} />
       </Flex>
     </Flex>

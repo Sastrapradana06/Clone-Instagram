@@ -2,33 +2,36 @@ import { Flex } from "@mantine/core";
 import AppShell from "../../../components/layout/app-shell";
 import NavLink from "../../../components/ui/nav-link";
 import { useParams } from "react-router-dom";
-import ButtonLink from "../../../components/ui/button-link";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getPostinganById, getUserByNamaPengguna } from "../../../store/api";
-import { useNavigate } from 'react-router-dom';
-import { formatPengikut } from "../../../store/utils";
+import { getPostinganById, getUserByNamaPengguna, handleIkutiUser } from "../../../store/api";
+import { useNavigate, useLocation } from 'react-router-dom';
+import { createCookies, formatPengikut, getUserIdByCookies } from "../../../store/utils";
 import Loading from "../../../components/ui/loading";
 import useAppStore from "../../../store/store";
 import { useShallow } from "zustand/react/shallow";
 
+import { FaSpinner } from "react-icons/fa";
 
 
 export default function ProfileByNamaPengguna() {
   const [dataPengguna, setDataPengguna] = useState({})
   const [postinganPengguna, setPostinganPengguna] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const { nama_pengguna } = useParams()
   const navigate = useNavigate()
+  const { pathname } = useLocation();
 
-  const [updateUserPostingan,] = useAppStore(
-    useShallow((state) => [state.updateUserPostingan])
+  const user_id = getUserIdByCookies();
+
+
+  const [updateUserPostingan, getUser] = useAppStore(
+    useShallow((state) => [state.updateUserPostingan, state.getUser])
   )
 
-
-
-  const getUser = async () => {
+  const getPengguna = async () => {
     const res = await getUserByNamaPengguna(nama_pengguna)
     if (res.status) {
       setDataPengguna(res.data[0])
@@ -49,13 +52,35 @@ export default function ProfileByNamaPengguna() {
 
   useEffect(() => {
     if (nama_pengguna) {
-      getUser()
+      getPengguna()
+      createCookies('prevLink', pathname)
     } else {
       navigate('/search')
     }
-
   }, [nama_pengguna])
 
+  const ikutiPengguna = async (id_pengguna) => {
+    setIsLoading(true)
+    const data = {
+      id_pengguna,
+      id_user: user_id
+    }
+
+    if (Object.keys(data).length > 0) {
+      const res = await handleIkutiUser(data)
+      if (res.status) {
+        setDataPengguna(prev => ({
+          ...prev,
+          data: {
+            ...prev.data,
+            pengikut: res.data.pengikut
+          }
+        }))
+        getUser()
+      }
+    }
+    setIsLoading(false)
+  }
 
   return (
     <AppShell>
@@ -69,15 +94,15 @@ export default function ProfileByNamaPengguna() {
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">4</p>
+                  <p className="font-semibold text-[1rem]">{postinganPengguna.length}</p>
                   <p>postingan</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{formatPengikut(dataPengguna.data.pengikut)}</p>
+                  <p className="font-semibold text-[1rem]">{formatPengikut(dataPengguna.data.pengikut.length)}</p>
                   <p>pengikut</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{dataPengguna?.data.mengikuti}</p>
+                  <p className="font-semibold text-[1rem]">{formatPengikut(dataPengguna.data.mengikuti.length)}</p>
                   <p>mengikuti</p>
                 </div>
               </Flex>
@@ -88,8 +113,22 @@ export default function ProfileByNamaPengguna() {
               <a href={dataPengguna.data.tautan} className='text-sky-300 text-[.8rem]' style={{ fontFamily: 'Poppins', fontWeight: 400 }}>{dataPengguna.data.tautan}</a>
             </div>
             <Flex className="w-[90%] m-auto h-max mt-2" justify={'space-between'} align={'center'}>
-              <button className="w-[40%] py-1 bg-sky-500 text-[.8rem] rounded-lg hover:bg-sky-600  font-semibold">Ikuti</button>
-              <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/bagikan-profile' title='Bagikan Profil' />
+              {isLoading ? (
+                <button className="w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600 flex justify-center items-center">
+                  <FaSpinner className="animate-spin text-green-400" size={21} />
+                </button>
+              ) : (
+                dataPengguna.data.pengikut.includes(user_id) ? (
+                  <button className="w-[40%] py-1 bg-zinc-300 text-black tracking-[1px] text-[.8rem] rounded-lg hover:bg-zinc-400  font-semibold flex justify-center items-center" onClick={() => ikutiPengguna(dataPengguna.id)}>
+                    Mengikuti
+                  </button>
+                ) : (
+                  <button className="w-[40%] py-1 bg-sky-500 text-[.8rem] rounded-lg hover:bg-sky-600  font-semibold flex justify-center items-center tracking-[1px]" onClick={() => ikutiPengguna(dataPengguna.id)}>
+                    Ikuti
+                  </button>
+                )
+              )}
+              <button className="w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600">Kirim Pesan</button>
               <button className="w-[15%] py-1 bg-zinc-800 text-[.8rem] rounded-lg flex justify-center items-center">
                 <TiUserAdd size={20} fill="white" />
               </button>

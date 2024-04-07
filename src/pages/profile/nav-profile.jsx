@@ -4,9 +4,10 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { Flex, Menu, rem } from '@mantine/core';
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
-import { deleteAllCookies } from "../../store/utils";
-import { useNavigate } from "react-router-dom";
+import { deleteAllCookies, createCookies } from "../../store/utils";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosLogOut } from "react-icons/io";
+import { useEffect } from 'react'
 
 export default function NavProfile() {
   const [dataUser, resetState] = useAppStore(
@@ -14,6 +15,12 @@ export default function NavProfile() {
   )
 
   const navigate = useNavigate()
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    createCookies('prevLink', pathname)
+  }, [pathname])
+
 
   const logOut = () => {
     resetState()

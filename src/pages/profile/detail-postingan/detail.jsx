@@ -6,6 +6,7 @@ import CardPostingan from "../../../components/ui/card-postingan";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
 import { handleLovePostingan } from "../../../store/api";
+import { getCookies } from "../../../store/utils";
 
 
 
@@ -14,6 +15,10 @@ export default function DetailPostinganUser() {
     useShallow((state) => [state.userPostingan, state.dataUser, state.updateUserPostingan])
   )
   const { id } = useParams()
+
+
+  const prevLink = getCookies('prevLink')
+
 
   useEffect(() => {
     if (id) {
@@ -50,7 +55,7 @@ export default function DetailPostinganUser() {
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
-      <NavLink title={'Postingan'} url={'/profile'} />
+      <NavLink title={'Postingan'} url={prevLink} />
       <Flex className="w-full h-max pt-[4rem]  pb-2" direction={'column'} gap={'md'}>
         {userPostingan ? (
           userPostingan.map((item, i) => {
@@ -65,6 +70,7 @@ export default function DetailPostinganUser() {
                 likes={item.data.love}
                 statusText={item.data.deskripsi}
                 handleLove={handleLove}
+                time={item.data.time}
               />
             )
           })

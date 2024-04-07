@@ -13,7 +13,7 @@ export default function PostinganUser() {
 
   useEffect(() => {
     getUserPostingan()
-  }, [userPostingan])
+  }, [])
 
 
   const navigate = useNavigate()
