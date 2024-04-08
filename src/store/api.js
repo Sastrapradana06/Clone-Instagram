@@ -1,7 +1,7 @@
 import { getCookies } from "./utils";
 
-// const endpoint = 'http://localhost:3000'
-const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+const endpoint = 'http://localhost:3000'
+// const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
 
 // + Auth 
@@ -185,6 +185,36 @@ export const handleLovePostingan = async (data) => {
 export const deletePostingan = async (id) => {
   try {
     const res = await fetch(`${endpoint}/posting/delete/${id}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+// + Status
+export const createStatus = async (data) => {
+  try {
+    const res = await fetch(`${endpoint}/status/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getStatusById = async (user_id) => {
+  try {
+    const res = await fetch(`${endpoint}/status/get/${user_id}`);
     const result = await res.json();
     return result
   } catch (error) {

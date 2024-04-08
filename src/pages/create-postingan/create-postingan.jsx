@@ -8,7 +8,7 @@ import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { useNavigate, useParams } from "react-router-dom";
 import Notification from "../../components/ui/notification";
-
+import { FiUploadCloud } from "react-icons/fi";
 
 export default function CreatePostingan() {
   const [getUserPostingan, userPostingan] = useAppStore(
@@ -112,41 +112,46 @@ export default function CreatePostingan() {
 
 
   return (
-    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex justify-center items-center flex-col">
+    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex items-center flex-col">
       <Notification status={status} title={title} />
       <NavLink title={'Buat Postingan'} url={'/home'} />
-      <Flex className="w-full h-max m-auto pt-20 pb-5" direction={'column'} gap={'md'} align={'center'}>
-        <Flex className="w-full h-max  text-white" direction={'column'} align={'center'} gap={'sm'}>
-          {urlImgStatus ? (
-            <img src={urlImgStatus} alt="user" className="w-[90%] h-[400px]  border object-cover" loading="lazy" />
-          ) : null}
-          {!id && (
-            <Button variant="light" color="green" disabled={isLoading} onClick={handleClick}>{urlImgStatus ? 'Ganti Foto' : 'Upload foto'}</Button>
-          )}
-          <input
-            type="file"
-            id="file-input"
-            className="file-input hidden"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          />
-        </Flex>
-
-        <form className="w-[90%] h-max flex gap-4 flex-col" onSubmit={handleForm}>
+      <div className="w-[90%] h-max pt-20 pb-5">
+        <p className="text-[.9rem] font-medium">Upload image</p>
+        {urlImgStatus ? (
+          <Flex className="w-full h-max  text-white mt-2" direction={'column'} align={'center'} gap={'sm'}>
+            <img src={urlImgStatus} alt="user" className="w-full h-[400px]  border border-dashed border-gray-500 object-cover" loading="lazy" />
+            {!id && (
+              <Button variant="light" color="indigo" disabled={isLoading} onClick={handleClick}>{urlImgStatus ? 'Ganti Foto' : 'Upload foto'}</Button>
+            )}
+          </Flex>
+        ) : (
+          <Flex className="w-full h-[200px] border border-dashed border-gray-500 mt-2" justify={'center'} align={'center'} direction={'column'}>
+            <FiUploadCloud size={30} className="text-sky-300 cursor-pointer" disabled={isLoading} onClick={handleClick} />
+            <p className="text-[.8rem] text-slate-300" >Pilih file untuk upload</p>
+          </Flex>
+        )}
+        <input
+          type="file"
+          id="file-input"
+          className="file-input hidden"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <form className="w-full h-max flex gap-4 flex-col mt-4" onSubmit={handleForm}>
           <Flex className="w-full h-max" direction={'column'}>
-            <label htmlFor="deskripsi" className="text-[.8rem] text-zinc-400">Deskripsi Status</label>
-            <textarea className="w-full bg-transparent border-b outline-none h-[100px]" name="deskripsi" value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} />
+            <label htmlFor="deskripsi" className="text-[.9rem] font-medium">Tulis Status</label>
+            <textarea className="w-full bg-transparent border border-zinc-400 rounded-md outline-none h-[200px] p-2 mt-2" name="deskripsi" value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} />
           </Flex>
 
           <div className="w-full">
-            <Button variant="light" color="indigo" type="submit">
+            <Button variant="light" color="green" type="submit">
               {isLoading ? (
                 <Loader color="green" type="dots" />
               ) : id ? 'Edit' : 'Posting'}
             </Button>
           </div>
         </form>
-      </Flex>
+      </div>
     </div>
   )
 }

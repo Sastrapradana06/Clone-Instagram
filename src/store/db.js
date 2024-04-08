@@ -60,6 +60,23 @@ export const uploadPostingan = async (file, nama_pengguna) => {
 
 }
 
+export const uploadImgStatus = async (file, nama_pengguna) => {
+  try {
+    const key = generateRandomString()
+    const data = {
+      path: `img_status/${nama_pengguna}/${key}`,
+      file,
+    }
+    const linkUrl = handleFile(data)
+    return linkUrl
+
+  } catch (err) {
+    console.log({err});
+    return false
+  }
+
+}
+
 export const deleteImage = async (path) => {
   const imageRef = ref(storage, path); 
   try {

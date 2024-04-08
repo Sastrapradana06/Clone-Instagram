@@ -1,13 +1,13 @@
 import { AiOutlineMore } from "react-icons/ai";
 import { Flex, Progress } from '@mantine/core';
 import { useEffect, useState } from "react";
-import { FiHeart } from "react-icons/fi";
+// import { FiHeart } from "react-icons/fi";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
 
 
 // eslint-disable-next-line react/prop-types
-export default function CardStatus({ imgProfil, imgStatus, textStatus, username }) {
+export default function CardStatus({ imgProfil, imgStatus, username }) {
   const [timesStatus, setTimeStatus] = useState(0)
   const [setIsShowStatus] = useAppStore(
     useShallow((state) => [state.setIsShowStatus])
@@ -34,7 +34,7 @@ export default function CardStatus({ imgProfil, imgStatus, textStatus, username 
 
   return (
     <div className="w-full h-max bg-zinc-800 relative text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
-      <div className="w-full h-[92vh]">
+      <div className="w-full h-[100vh]">
         <img src={`${imgStatus}`} alt="img_status" className="w-full h-full object-cover brightness-90" loading="lazy" />
       </div>
       <Flex className="absolute top-[10px] w-[100%] h-max m-auto z-20 " direction={'column'} align={'center'} gap={'xs'}>
@@ -49,7 +49,7 @@ export default function CardStatus({ imgProfil, imgStatus, textStatus, username 
           <AiOutlineMore size={25} color="white" />
         </Flex>
       </Flex>
-      <div className="w-full h-[8vh] flex justify-center items-center">
+      {/* <div className="w-full h-[8vh] flex justify-center items-center">
         {textStatus ? (
           <p>{textStatus}</p>
         ) : (
@@ -62,7 +62,7 @@ export default function CardStatus({ imgProfil, imgStatus, textStatus, username 
             <FiHeart size={25} className="text-white cursor-pointer" />
           </Flex>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }

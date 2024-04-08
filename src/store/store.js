@@ -1,12 +1,11 @@
 import { create } from 'zustand'
-import { getPostinganById, getUserLogin } from './api';
+import { getPostinganById, getStatusById, getUserLogin } from './api';
 import { getCookies } from './utils';
 
 
 const useAppStore = create((set) => ({
 
   isShowStatus: false,
-  // setIsShowStatus: () => set((state) => ({ isShowStatus: state.isShowStatus === false ? true : false })),
   setIsShowStatus : (data) => set({ isShowStatus: data }),
 
   dataUser : undefined,
@@ -37,7 +36,22 @@ const useAppStore = create((set) => ({
     }
   },
 
-  resetState : () => set({dataUser: undefined, userPostingan:undefined}),
+  userStatus : undefined,
+  updateUserStatus : (data) => set({userStatus: data}),
+  getUserStatus: async () => {
+    try {
+      const dataByCookies = getCookies('user_data')
+      const {id} = JSON.parse(dataByCookies)
+      const res = await getStatusById(id)
+      if(res.status) {
+        set({userStatus: res.data})
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  resetState : () => set({dataUser: undefined, userPostingan:undefined, userStatus:undefined}),
 
 
 }))

@@ -8,34 +8,26 @@ import useAppStore from '../../store/store';
 import { useState } from 'react';
 import CardStatus from '../../components/ui/card-status';
 import { formatPengikut } from '../../store/utils';
+import ShowImgProfil from '../../components/ui/show-img-profil';
+import { useNavigate } from 'react-router-dom'
 
 
 
 export default function UserProfile() {
-  const [isShowStatus, setIsShowStatus, dataUser, userPostingan] = useAppStore(
-    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userPostingan])
+  const [isShowStatus, setIsShowStatus, dataUser, userPostingan, userStatus] = useAppStore(
+    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userPostingan, state.userStatus])
   )
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate()
+
+  const handleCloseModal = () => {
+    setShow(false);
+  };
+
 
   const [data, setData] = useState()
   const [isPeople, setIsPeople] = useState(false)
 
-  const dataStatusUser = [
-    // {
-    //   id: 1,
-    //   imgUrl: 'https://i.pinimg.com/564x/9b/77/e9/9b77e9bbbb7c76837d67e44a98c01c5d.jpg',
-    //   textStatus: '💙'
-    // },
-    {
-      id: 2,
-      imgUrl: 'https://i.pinimg.com/564x/ec/d3/6b/ecd36bed10f5e06bdf1ef966031c0e03.jpg',
-      textStatus: 'Work'
-    },
-    {
-      id: 3,
-      imgUrl: 'https://i.pinimg.com/564x/88/6d/43/886d43c37ff739905f67153caab26e99.jpg',
-      textStatus: 'Lorem Ipsum'
-    },
-  ]
 
   const findPeople = [
     {
@@ -53,12 +45,7 @@ export default function UserProfile() {
   ]
 
   const showStatus = (item) => {
-    const dataUser = {
-      nama_pengguna: 'sean_',
-      imgProfil: 'https://i.pinimg.com/564x/c0/18/31/c0183163ba468401a02ae53b2665daa1.jpg',
-    }
-    const newData = { ...dataUser, ...item }
-    setData(newData)
+    setData(item.data)
     setIsShowStatus(true)
   }
 
@@ -92,15 +79,19 @@ export default function UserProfile() {
     )
   }
 
+
   return (
     <>
+      {show && (
+        <ShowImgProfil url={dataUser?.img_profil} handleCloseModal={handleCloseModal} />
+      )}
+
       {isShowStatus && (
         <div className="w-full h-[100vh] fixed left-0 top-0 bg-zinc-800 z-50">
           <CardStatus
-            imgProfil={data.imgProfil}
-            imgStatus={data.imgUrl}
+            imgProfil={data.img_profil}
+            imgStatus={data.img_status}
             username={data.nama_pengguna}
-            textStatus={data.textStatus}
           />
         </div>
       )}
@@ -110,7 +101,7 @@ export default function UserProfile() {
           <>
             <Flex className="w-full h-max m-auto  mt-4" justify={'space-between'} gap={'md'} align={'center'}>
               <div className="w-max h-max">
-                <img src={dataUser.img_profil == "" ? '/icon.jfif' : dataUser.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" loading='lazy' />
+                <img src={dataUser.img_profil == "" ? '/icon.jfif' : dataUser.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full cursor-pointer" loading='lazy' onClick={() => setShow(true)} />
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">
@@ -142,21 +133,21 @@ export default function UserProfile() {
           </button>
         </Flex>
         <div className="flex overflow-x-scroll  mt-4 w-full h-max gap-2">
-          {dataStatusUser ? (
-            dataStatusUser.map((item, i) => {
+          {userStatus ? (
+            userStatus.map((item, i) => {
               return (
                 <div className="inline-block w-max h-max  flex-none text-center cursor-pointer" key={i} onClick={() => showStatus(item)}>
-                  <img src={item.imgUrl} alt="cantik" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading='lazy' />
-                  <p className='text-[.7rem] mt-1'>{item.textStatus}</p>
+                  <img src={item.data.img_status} alt="img_status" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading='lazy' />
+                  {/* <p className='text-[.7rem] mt-1'>{item.textStatus}</p> */}
                 </div>
               )
             })
           ) : null}
           <div className="inline-block w-max h-max  flex-none text-center cursor-pointer">
-            <Flex className='w-[63px] h-[63px] border rounded-full' justify={'center'} align={'center'}>
+            <Flex className='w-[63px] h-[63px] border rounded-full cursor-pointer' justify={'center'} align={'center'} onClick={() => navigate('/create-status')}>
               <FaPlus className=' text-[1.3rem] text-white' />
             </Flex>
-            <p className='text-[.8rem] mt-1'>Baru</p>
+            {/* <p className='text-[.8rem] mt-1'>Baru</p> */}
           </div>
         </div>
         {isPeople && (

@@ -100,7 +100,7 @@ export default function EditProfile() {
       {dataUser && (
         <Flex className="w-[90%] h-max m-auto pt-20" direction={'column'} gap={'xs'} align={'center'}>
           <Flex className="w-max h-max  text-white" direction={'column'} align={'center'} gap={'sm'}>
-            <img src={data?.img_profil == "" ? '/icon.jfif' : data?.img_profil} alt="user" className="w-[80px] h-[80px] rounded-full border object-cover" />
+            <img src={data?.img_profil == "" ? '/icon.jfif' : data?.img_profil} alt="user" className="w-[100px] h-[100px] rounded-full border object-cover" />
             <Button size="xs" radius='md' type='submit' color="green" variant="outline" onClick={handleClick}>
               {isLoadingFoto ? (
                 <Loader color="green" type="dots" />

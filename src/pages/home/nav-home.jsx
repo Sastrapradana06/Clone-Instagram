@@ -31,7 +31,7 @@ export default function NavHome() {
 
   return (
     <div className={`w-[100%] h-[50px] flex justify-between items-center px-4 ${isFixed ? 'fixed top-0 bg-black px-4' : ''}`}>
-      <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[1.5rem]">Instagram</h1>
+      <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[1.5rem]">Snapvibes</h1>
       <div className="flex gap-4 w-max">
         <FiHeart size={20} className="text-white cursor-pointer" />
         <AiOutlineMessage size={20} className="text-white cursor-pointer" />

@@ -65,7 +65,7 @@ export default function Sign() {
       <ToastContainer />
       <div className="w-[90%] h-max  flex flex-col items-center gap-6">
         <div className="text-center">
-          <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Insatagram</h1>
+          <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Snapvibes</h1>
         </div>
         <form onSubmit={handleSubmit} className="w-full  flex flex-col gap-4 items-center h-max ">
           <div className="w-[90%] ">

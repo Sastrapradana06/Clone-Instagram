@@ -11,6 +11,7 @@ import Loading from "../../../components/ui/loading";
 import useAppStore from "../../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { FaSpinner } from "react-icons/fa";
+import ShowImgProfil from "../../../components/ui/show-img-profil";
 
 
 export default function ProfileByNamaPengguna() {
@@ -24,7 +25,11 @@ export default function ProfileByNamaPengguna() {
   const user_id = getUserIdByCookies();
   const prevLink2 = getCookies('prevLink2')
 
+  const [show, setShow] = useState(false);
 
+  const handleCloseModal = () => {
+    setShow(false);
+  };
 
   const [updateUserPostingan, getUser] = useAppStore(
     useShallow((state) => [state.updateUserPostingan, state.getUser])
@@ -83,13 +88,17 @@ export default function ProfileByNamaPengguna() {
 
   return (
     <AppShell>
+      {show && Object.keys(dataPengguna).length > 0 && (
+        <ShowImgProfil url={dataPengguna?.data.img_profil} handleCloseModal={handleCloseModal} />
+      )}
+
       {Object.keys(dataPengguna).length > 0 ? (
         <div className="w-full h-max">
           <NavLink title={dataPengguna?.data.nama_pengguna} url={prevLink2} />
           <div className="w-full h-max m-auto mt-[70px]">
             <Flex className="w-[90%] h-max m-auto" justify={'space-between'} gap={'md'} align={'center'}>
               <div className="w-max h-max">
-                <img src={dataPengguna?.data.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full" />
+                <img src={dataPengguna?.data.img_profil} alt="icon" className="w-[70px] h-[70px] object-cover rounded-full cursor-pointer" loading="lazy" onClick={() => setShow(true)} />
               </div>
               <Flex className=" w-[70%] h-max" justify={'space-between'}>
                 <div className="text-center text-[.8rem]">

@@ -17,10 +17,11 @@ import Profile from './pages/profile/profile.jsx';
 import Rells from './pages/rells/rells.jsx';
 import EditProfile from './pages/profile/edit-profil/edit-profil.jsx';
 import PostinganSearch from './pages/search/postingan/postingan.jsx';
-import CreatePostingan from './pages/create/create-postingan.jsx';
+import CreatePostingan from './pages/create-postingan/create-postingan.jsx';
 import { getCookies } from './store/utils.js';
 import DetailPostinganUser from './pages/profile/detail-postingan/detail.jsx';
 import ProfileByNamaPengguna from './pages/search/profile/profile_pengguna.jsx';
+import CreateStatus from './pages/create-status/create-status.jsx';
 
 // eslint-disable-next-line react/prop-types, react-refresh/only-export-components
 function PrivatePage({ children }) {
@@ -58,6 +59,8 @@ const router = createBrowserRouter([
     path: "/search/postingan/:id",
     element: <PostinganSearch />,
   },
+
+  // + Profile
   {
     path: "/profile",
     element: <Profile />,
@@ -71,16 +74,24 @@ const router = createBrowserRouter([
     element: <DetailPostinganUser />,
   },
   {
-    path: "/rells",
-    element: <Rells />,
-  },
-  {
     path: "/create-postingan",
     element: <CreatePostingan />,
   },
   {
     path: "/edit-postingan/:id",
     element: <CreatePostingan />,
+  },
+
+  // + Status
+  {
+    path: "/create-status",
+    element: <CreateStatus />,
+  },
+
+  // + relss
+  {
+    path: "/rells",
+    element: <Rells />,
   },
 ])
 
