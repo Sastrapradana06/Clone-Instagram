@@ -1,19 +1,19 @@
 /* eslint-disable react/prop-types */
 import { Flex, Menu, rem } from '@mantine/core';
 import { FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
-import { AiOutlineMore } from "react-icons/ai";
+import { AiOutlineMore, AiOutlineExclamationCircle } from "react-icons/ai";
 import { TbMessageCircle } from "react-icons/tb";
 import { LuSend } from "react-icons/lu";
 import { HiPencil } from "react-icons/hi";
 import ReadMore from './read-more';
-import { formatFirestoreTimestamp, formatPengikut, getUserIdByCookies } from '../../store/utils';
+import { createCookies, formatFirestoreTimestamp, formatPengikut, getUserIdByCookies } from '../../store/utils';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { MdDelete } from "react-icons/md";
 import { useState } from 'react';
 import ShowModal from './modal';
 import { deletePostingan } from '../../store/api';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { deleteImage } from '../../store/db';
 
 
@@ -26,11 +26,19 @@ export default function CardPostingan(...props) {
   )
   const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time } = props[0];
 
-  const jumlahLike = likes?.length
-
   const idUser = getUserIdByCookies()
 
   const navigate = useNavigate()
+  const { pathname } = useLocation();
+
+  const handleNavigate = (nama_pengguna) => {
+    createCookies('prevLink2', pathname)
+    if (dataUser.nama_pengguna == nama_pengguna) {
+      navigate('/profile')
+    } else {
+      navigate(`/search/${nama_pengguna}`)
+    }
+  };
 
   const handleDelete = async () => {
     const res = await deletePostingan(id)
@@ -41,7 +49,6 @@ export default function CardPostingan(...props) {
       navigate('/profile')
     }
   }
-
 
   const MenuComponentUser = () => {
     return (
@@ -99,21 +106,24 @@ export default function CardPostingan(...props) {
     <Flex id={`${id}`} className="w-full h-max" direction={'column'} align={'center'} style={{ fontFamily: 'Montserrat', fontWeight: 400 }} key={`${key}`}>
       {isModal && (
         <ShowModal>
-          <div className="w-[90%] bg-zinc-700 shadow-xl flex flex-col items-center gap-4 text-white p-2 rounded-md border-red-500 border">
-            <div className="w-full h-max text-center">
-              <p className="text-[.8rem] font-bold">⛔ Yakin untuk menghapus postingan ini?</p>
-              <p className="text-[.7rem] font-semibold text-zinc-400 mt-1">postingan yang telah dihapus tidak bisa dipulihkan</p>
+          <div className="w-[90%] bg-zinc-200 shadow-xl flex flex-col items-center gap-4 text-black p-2 rounded-lg">
+            <div className="w-[90%] h-max text-center flex flex-col items-center">
+              <button className='p-2 bg-red-200 rounded-full'>
+                <AiOutlineExclamationCircle fill='crimson' size={23} />
+              </button>
+              <p className="text-[.9rem] font-bold">Delete Postingan</p>
+              <p className="text-[.7rem] font-semibold text-zinc-400 mt-1 text-center">postingan yang telah dihapus tidak bisa dipulihkan</p>
             </div>
-            <div className="w-[60%] h-max flex gap-4 items-center mb-2">
-              <button className="py-2 px-8 border border-sky-400 text-[.8rem] hover:bg-zinc-800 " onClick={() => setIsModal(false)}>No</button>
-              <button className="py-2 px-8 border border-sky-400 bg-sky-500 text-[.8rem] hover:bg-sky-700" onClick={handleDelete}>Yes</button>
+            <div className="w-[90%] h-max flex gap-4 items-center justify-center mb-2">
+              <button className="py-2 px-10 border text-[.8rem] bg-gray-300  rounded-lg hover:bg-gray-400 " onClick={() => setIsModal(false)}>No</button>
+              <button className="py-2 px-10 bg-red-500 text-[.8rem] text-white hover:bg-red-600 rounded-lg" onClick={handleDelete}>Yes</button>
             </div>
           </div>
         </ShowModal>
       )}
       <Flex className="w-[90%] h-[50px]" justify={'space-between'} align={'center'}>
-        <Flex className="w-max" align={'center'} gap={'sm'}>
-          <img src={`${profileImageUrl}`} alt="pp" loading='lazy' className="w-[40px] h-[40px] rounded-full border-2 border-sky-800 object-cover" />
+        <Flex className="w-max cursor-pointer" align={'center'} gap={'sm'} onClick={() => handleNavigate(nama_pengguna)}>
+          <img src={`${profileImageUrl}`} alt="pp" loading='lazy' className={`w-[40px] h-[40px] rounded-full border-2 object-cover ${idUser == user_id ? 'border-white ' : 'border-sky-800 '}`} />
           <p className="text-[.9rem]">{nama_pengguna}</p>
         </Flex>
         <div className="w-max h-max">
@@ -138,7 +148,7 @@ export default function CardPostingan(...props) {
         <FaRegBookmark size={24} color="white" />
       </Flex>
       <Flex className="w-[90%] h-max text-[.8rem]" direction={'column'}>
-        <p className='font-semibold'>{formatPengikut(jumlahLike)} suka</p>
+        <p className='font-semibold'>{formatPengikut(likes?.length)} suka</p>
         <p className='text-[.8rem] text-zinc-300'>{formatFirestoreTimestamp(time)}</p>
         <ReadMore text={`${statusText}`} />
       </Flex>

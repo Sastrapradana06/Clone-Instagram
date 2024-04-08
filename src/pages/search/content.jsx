@@ -1,5 +1,5 @@
 import { Flex, Loader } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { IoSearch } from "react-icons/io5";
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
@@ -7,6 +7,7 @@ import { getUserIncludeNamaPengguna } from '../../store/api';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { createCookies } from '../../store/utils';
 
 
 
@@ -16,6 +17,8 @@ export default function Content() {
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedValue] = useDebounce(value, 2000);
   const [isFocused, setIsFocused] = useState(false);
+
+  const { pathname } = useLocation();
   const navigate = useNavigate()
 
   const [dataUser] = useAppStore(
@@ -23,6 +26,7 @@ export default function Content() {
   )
 
   const handleNavigate = (nama_pengguna) => {
+    createCookies('prevLink2', pathname)
     if (dataUser.nama_pengguna == nama_pengguna) {
       navigate('/profile')
     } else {

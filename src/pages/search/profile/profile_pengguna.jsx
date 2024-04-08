@@ -1,17 +1,15 @@
 import { Flex } from "@mantine/core";
 import AppShell from "../../../components/layout/app-shell";
 import NavLink from "../../../components/ui/nav-link";
-import { useParams } from "react-router-dom";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { getPostinganById, getUserByNamaPengguna, handleIkutiUser } from "../../../store/api";
-import { useNavigate, useLocation } from 'react-router-dom';
-import { createCookies, formatPengikut, getUserIdByCookies } from "../../../store/utils";
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../../store/utils";
 import Loading from "../../../components/ui/loading";
 import useAppStore from "../../../store/store";
 import { useShallow } from "zustand/react/shallow";
-
 import { FaSpinner } from "react-icons/fa";
 
 
@@ -23,8 +21,9 @@ export default function ProfileByNamaPengguna() {
   const { nama_pengguna } = useParams()
   const navigate = useNavigate()
   const { pathname } = useLocation();
-
   const user_id = getUserIdByCookies();
+  const prevLink2 = getCookies('prevLink2')
+
 
 
   const [updateUserPostingan, getUser] = useAppStore(
@@ -86,7 +85,7 @@ export default function ProfileByNamaPengguna() {
     <AppShell>
       {Object.keys(dataPengguna).length > 0 ? (
         <div className="w-full h-max">
-          <NavLink title={dataPengguna?.data.nama_pengguna} url={'/search'} />
+          <NavLink title={dataPengguna?.data.nama_pengguna} url={prevLink2} />
           <div className="w-full h-max m-auto mt-[70px]">
             <Flex className="w-[90%] h-max m-auto" justify={'space-between'} gap={'md'} align={'center'}>
               <div className="w-max h-max">
