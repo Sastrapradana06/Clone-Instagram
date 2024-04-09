@@ -5,12 +5,15 @@ import { getAllPostingan, handleLovePostingan } from '../../store/api';
 import { useEffect, useState } from 'react';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
+import { ImSpinner9 } from "react-icons/im";
 
 export default function Postingan() {
   const [dataPostingan, setDataPostingan] = useState([])
   const [dataUser] = useAppStore(
     useShallow((state) => [state.dataUser])
   )
+
+  const [isLoading, setIsLoading] = useState(false)
 
 
   // const data = [
@@ -57,10 +60,12 @@ export default function Postingan() {
   // ];
 
   const getPostingan = async () => {
+    setIsLoading(true)
     const res = await getAllPostingan()
     if (res.status) {
       setDataPostingan(res.data)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -91,6 +96,11 @@ export default function Postingan() {
 
   return (
     <Flex className="w-full h-max  mb-[60px]" direction={'column'} align={'center'} gap={'md'}>
+      {isLoading && (
+        <div className="w-full h-[60vh] flex justify-center items-center">
+          <ImSpinner9 size={30} className='text-sky-400 animate-spin' />
+        </div>
+      )}
       {dataPostingan.length > 0 && (
         dataPostingan.map((item, i) => {
           return (

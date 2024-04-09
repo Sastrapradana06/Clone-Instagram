@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import ButtonLink from '../../components/ui/button-link';
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CardStatus from '../../components/ui/card-status';
 import { formatPengikut } from '../../store/utils';
 import ShowImgProfil from '../../components/ui/show-img-profil';
@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router-dom'
 
 
 export default function UserProfile() {
-  const [isShowStatus, setIsShowStatus, dataUser, userPostingan, userStatus] = useAppStore(
-    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userPostingan, state.userStatus])
+  const [isShowStatus, setIsShowStatus, dataUser, userPostingan, userStatus, getUserStatus] = useAppStore(
+    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userPostingan, state.userStatus, state.getUserStatus])
   )
   const [show, setShow] = useState(false);
   const navigate = useNavigate()
@@ -24,9 +24,15 @@ export default function UserProfile() {
     setShow(false);
   };
 
+  useEffect(() => {
+    if (userStatus == undefined) {
+      getUserStatus()
+    }
+  }, [])
 
-  const [data, setData] = useState()
+
   const [isPeople, setIsPeople] = useState(false)
+  const [idStatus, setIdStatus] = useState('')
 
 
   const findPeople = [
@@ -44,9 +50,9 @@ export default function UserProfile() {
     },
   ]
 
-  const showStatus = (item) => {
-    setData(item.data)
+  const showStatus = (id) => {
     setIsShowStatus(true)
+    setIdStatus(id)
   }
 
 
@@ -80,6 +86,7 @@ export default function UserProfile() {
   }
 
 
+
   return (
     <>
       {show && (
@@ -89,9 +96,8 @@ export default function UserProfile() {
       {isShowStatus && (
         <div className="w-full h-[100vh] fixed left-0 top-0 bg-zinc-800 z-50">
           <CardStatus
-            imgProfil={data.img_profil}
-            imgStatus={data.img_status}
-            username={data.nama_pengguna}
+            data={userStatus}
+            id={idStatus}
           />
         </div>
       )}
@@ -136,7 +142,7 @@ export default function UserProfile() {
           {userStatus ? (
             userStatus.map((item, i) => {
               return (
-                <div className="inline-block w-max h-max  flex-none text-center cursor-pointer" key={i} onClick={() => showStatus(item)}>
+                <div className="inline-block w-max h-max  flex-none text-center cursor-pointer" key={i} onClick={() => showStatus(item.id)}>
                   <img src={item.data.img_status} alt="img_status" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading='lazy' />
                   {/* <p className='text-[.7rem] mt-1'>{item.textStatus}</p> */}
                 </div>
