@@ -4,7 +4,7 @@ import NavLink from "../../../components/ui/nav-link";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getPostinganById, getUserByNamaPengguna, handleIkutiUser } from "../../../store/api";
+import { getPostinganById, getStatusById, getUserByNamaPengguna, handleIkutiUser } from "../../../store/api";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../../store/utils";
 import Loading from "../../../components/ui/loading";
@@ -12,12 +12,22 @@ import useAppStore from "../../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { FaSpinner } from "react-icons/fa";
 import ShowImgProfil from "../../../components/ui/show-img-profil";
+import CardStatus from "../../../components/ui/card-status";
 
 
 export default function ProfileByNamaPengguna() {
   const [dataPengguna, setDataPengguna] = useState({})
   const [postinganPengguna, setPostinganPengguna] = useState([])
+  const [statusPengguna, setStatusPengguna] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [show, setShow] = useState(false);
+  const [idStatus, setIdStatus] = useState('')
+
+
+
+  const [updateUserPostingan, getUser, isShowStatus, setIsShowStatus] = useAppStore(
+    useShallow((state) => [state.updateUserPostingan, state.getUser, state.isShowStatus, state.setIsShowStatus])
+  )
 
   const { nama_pengguna } = useParams()
   const navigate = useNavigate()
@@ -25,24 +35,33 @@ export default function ProfileByNamaPengguna() {
   const user_id = getUserIdByCookies();
   const prevLink2 = getCookies('prevLink2')
 
-  const [show, setShow] = useState(false);
 
   const handleCloseModal = () => {
     setShow(false);
   };
 
-  const [updateUserPostingan, getUser] = useAppStore(
-    useShallow((state) => [state.updateUserPostingan, state.getUser])
-  )
+  const showStatus = (id) => {
+    setIsShowStatus(true)
+    setIdStatus(id)
+  }
+
 
   const getPengguna = async () => {
     const res = await getUserByNamaPengguna(nama_pengguna)
     if (res.status) {
       setDataPengguna(res.data[0])
-      getPostingan(res.data[0].id)
+      await getPostingan(res.data[0].id)
+      await getStatus(res.data[0].id)
     } else {
       setDataPengguna([])
       navigate('/search')
+    }
+  }
+
+  const getStatus = async (id) => {
+    const res = await getStatusById(id)
+    if (res.status) {
+      setStatusPengguna(res.data)
     }
   }
 
@@ -90,6 +109,15 @@ export default function ProfileByNamaPengguna() {
     <AppShell>
       {show && Object.keys(dataPengguna).length > 0 && (
         <ShowImgProfil url={dataPengguna?.data.img_profil} handleCloseModal={handleCloseModal} />
+      )}
+
+      {isShowStatus && (
+        <div className="w-full h-[100vh] fixed left-0 top-0 bg-zinc-800 z-50">
+          <CardStatus
+            data={statusPengguna}
+            id={idStatus}
+          />
+        </div>
       )}
 
       {Object.keys(dataPengguna).length > 0 ? (
@@ -141,12 +169,15 @@ export default function ProfileByNamaPengguna() {
                 <TiUserAdd size={20} fill="white" />
               </button>
             </Flex>
-            {/* <div className="flex overflow-x-scroll  mt-4 w-[90%] m-auto h-max gap-2">
-              <div className="inline-block w-max h-max  flex-none text-center cursor-pointer">
-                <img src={'/icon.jfif'} alt="cantik" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading="lazy" />
-                <p className='text-[.7rem] mt-1'>Luvv</p>
-              </div>
-            </div> */}
+            <div className="flex overflow-x-scroll  mt-4 w-[90%] m-auto h-max gap-2">
+              {statusPengguna.length > 0 && (
+                statusPengguna.map((item) => (
+                  <div className="inline-block w-max h-max  flex-none text-center cursor-pointer" key={item.id} onClick={() => showStatus(item.id)}>
+                    <img src={item.data.img_status} alt="img_profil" className="object-cover w-[65px] h-[65px] border-2 border-zinc-800 rounded-full  p-1 m-auto" loading="lazy" />
+                  </div>
+                ))
+              )}
+            </div>
             <div className="w-full h-max mt-2 mb-[60px]">
               <Flex className="w-[90%] m-auto h-[50px] border-b" justify={'center'} align={'center'}>
                 <TbBoxPadding size={35} />
@@ -166,6 +197,8 @@ export default function ProfileByNamaPengguna() {
           </div>
         </div>
       ) : <Loading />}
+
     </AppShell>
   )
 }
+

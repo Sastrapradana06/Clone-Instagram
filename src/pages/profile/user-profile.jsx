@@ -115,11 +115,11 @@ export default function UserProfile() {
                   <p>postingan</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.pengikut.length)}</p>
+                  <p className="font-semibold text-[1rem]">{dataUser.pengikut.length > 0 ? formatPengikut(dataUser.pengikut.length) : 0}</p>
                   <p>pengikut</p>
                 </div>
                 <div className="text-center text-[.8rem]">
-                  <p className="font-semibold text-[1rem]">{formatPengikut(dataUser.mengikuti.length)}</p>
+                  <p className="font-semibold text-[1rem]">{dataUser.mengikuti.length > 0 ? formatPengikut(dataUser.mengikuti.length) : 0}</p>
                   <p>mengikuti</p>
                 </div>
               </Flex>

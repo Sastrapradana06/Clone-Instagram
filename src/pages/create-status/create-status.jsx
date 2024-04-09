@@ -58,7 +58,6 @@ export default function CreateStatus() {
       }
 
       const res = await createStatus(data)
-      console.log({ res });
       if (res.status) {
         handleNotif('success', 'Berhasil Membuat Status')
         setUrlImgStatus('')

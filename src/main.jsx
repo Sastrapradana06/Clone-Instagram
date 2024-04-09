@@ -8,6 +8,7 @@ import {
   Navigate
 } from "react-router-dom";
 import '@mantine/core/styles.css';
+import '@mantine/carousel/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import Sign from './pages/sign/sign.jsx';

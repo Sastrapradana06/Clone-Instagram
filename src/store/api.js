@@ -212,9 +212,42 @@ export const createStatus = async (data) => {
   }
 }
 
+export const getAllStatus = async () => {
+  try {
+    const res = await fetch(`${endpoint}/status/get`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
 export const getStatusById = async (user_id) => {
   try {
     const res = await fetch(`${endpoint}/status/get/${user_id}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const deleteStatusUser = async (id) => {
+  try {
+    const res = await fetch(`${endpoint}/status/delete/${id}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const deleteStatusOld = async () => {
+  try {
+    const res = await fetch(`${endpoint}/status/delete`);
     const result = await res.json();
     return result
   } catch (error) {
