@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
 import { useEffect, useState } from 'react';
 import CardStatus from '../../components/ui/card-status';
-import { formatPengikut } from '../../store/utils';
+import { formatPengikut, getUserIdByCookies } from '../../store/utils';
 import ShowImgProfil from '../../components/ui/show-img-profil';
 import { useNavigate } from 'react-router-dom'
 
@@ -19,6 +19,7 @@ export default function UserProfile() {
   )
   const [show, setShow] = useState(false);
   const navigate = useNavigate()
+  const user_id = getUserIdByCookies()
 
   const handleCloseModal = () => {
     setShow(false);
@@ -114,11 +115,11 @@ export default function UserProfile() {
                   <p className="font-semibold text-[1rem]">{userPostingan ? formatPengikut(userPostingan.length) : 0}</p>
                   <p>postingan</p>
                 </div>
-                <div className="text-center text-[.8rem]">
+                <div className="text-center text-[.8rem] cursor-pointer" onClick={() => navigate(`pengikut/${user_id}`)}>
                   <p className="font-semibold text-[1rem]">{dataUser.pengikut.length > 0 ? formatPengikut(dataUser.pengikut.length) : 0}</p>
                   <p>pengikut</p>
                 </div>
-                <div className="text-center text-[.8rem]">
+                <div className="text-center text-[.8rem] cursor-pointer" onClick={() => navigate(`mengikuti/${user_id}`)}>
                   <p className="font-semibold text-[1rem]">{dataUser.mengikuti.length > 0 ? formatPengikut(dataUser.mengikuti.length) : 0}</p>
                   <p>mengikuti</p>
                 </div>

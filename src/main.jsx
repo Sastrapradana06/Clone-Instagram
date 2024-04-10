@@ -23,6 +23,7 @@ import { getCookies } from './store/utils.js';
 import DetailPostinganUser from './pages/profile/detail-postingan/detail.jsx';
 import ProfileByNamaPengguna from './pages/search/profile/profile_pengguna.jsx';
 import CreateStatus from './pages/create-status/create-status.jsx';
+import DaftarPengikutMengikuti from './pages/profile/pengikut-mengikuti/pengikut-mengikuti.jsx';
 
 // eslint-disable-next-line react/prop-types, react-refresh/only-export-components
 function PrivatePage({ children }) {
@@ -81,6 +82,14 @@ const router = createBrowserRouter([
   {
     path: "/edit-postingan/:id",
     element: <CreatePostingan />,
+  },
+  {
+    path: "profile/pengikut/:id",
+    element: <DaftarPengikutMengikuti />,
+  },
+  {
+    path: "profile/mengikuti/:id",
+    element: <DaftarPengikutMengikuti />,
   },
 
   // + Status

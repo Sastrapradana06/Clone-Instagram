@@ -12,6 +12,7 @@ import { getUserIdByCookies, formatFirestoreTimestamp } from "../../store/utils"
 import { MdDelete } from "react-icons/md";
 import { deleteStatusUser } from "../../store/api";
 import { deleteImage } from "../../store/db";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -21,6 +22,8 @@ export default function CardStatus({ data, id }) {
   const [setIsShowStatus, getUserStatus] = useAppStore(
     useShallow((state) => [state.setIsShowStatus, state.getUserStatus])
   )
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (id) {
@@ -71,6 +74,11 @@ export default function CardStatus({ data, id }) {
     }
   }
 
+  const handleNavigate = (nama_pengguna) => {
+    setIsShowStatus(false)
+    navigate(`/search/${nama_pengguna}`)
+  }
+
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     setTimeStatus(prevTime => {
@@ -98,7 +106,7 @@ export default function CardStatus({ data, id }) {
               <Flex className="absolute top-[15px] w-[100%] h-max m-auto z-20 " direction={'column'} align={'center'} gap={'xs'}>
                 <Flex className="w-[90%] h-max" justify={'space-between'} align={'center'}>
                   <Flex align={'center'} gap={'sm'} className="">
-                    <img src={status.data.img_profil} alt={`img_profil_${index}`} className="w-[50px] h-[50px] rounded-full object-cover" loading="lazy" />
+                    <img src={status.data.img_profil} alt={`img_profil_${index}`} className="w-[50px] h-[50px] rounded-full object-cover cursor-pointer" loading="lazy" onClick={handleNavigate} />
                     <Flex direction={'column'}>
                       <p className="text-[.9rem] font-bold">{status.data.nama_pengguna}</p>
                       <p className="text-[.7rem] text-zinc-300">{formatFirestoreTimestamp(status.data.time)}</p>

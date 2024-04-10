@@ -63,7 +63,9 @@ export default function Postingan() {
     setIsLoading(true)
     const res = await getAllPostingan()
     if (res.status) {
-      setDataPostingan(res.data)
+      const filterData = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
+      console.log({ filterData });
+      setDataPostingan(filterData)
     }
     setIsLoading(false)
   }
