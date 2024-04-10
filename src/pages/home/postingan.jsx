@@ -6,12 +6,15 @@ import { useEffect, useState } from 'react';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { ImSpinner9 } from "react-icons/im";
+import { getUserIdByCookies } from '../../store/utils';
 
 export default function Postingan() {
   const [dataPostingan, setDataPostingan] = useState([])
   const [dataUser] = useAppStore(
     useShallow((state) => [state.dataUser])
   )
+
+  const user_id = getUserIdByCookies()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -63,8 +66,7 @@ export default function Postingan() {
     setIsLoading(true)
     const res = await getAllPostingan()
     if (res.status) {
-      const filterData = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
-      console.log({ filterData });
+      const filterData = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id) || item.data.user_id == user_id)
       setDataPostingan(filterData)
     }
     setIsLoading(false)
