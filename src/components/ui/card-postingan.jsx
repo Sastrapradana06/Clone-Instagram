@@ -21,19 +21,20 @@ import { deleteImage } from '../../store/db';
 
 export default function CardPostingan(...props) {
   const [isModal, setIsModal] = useState(false)
-  const [dataUser, getUserPostingan] = useAppStore(
-    useShallow((state) => [state.dataUser, state.getUserPostingan])
+  const [getUserPostingan] = useAppStore(
+    useShallow((state) => [state.getUserPostingan])
   )
-  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time } = props[0];
+  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time, bookmark, handleBookmark } = props[0];
 
   const idUser = getUserIdByCookies()
 
   const navigate = useNavigate()
   const { pathname } = useLocation();
 
-  const handleNavigate = (nama_pengguna) => {
-    createCookies('prevLink2', pathname)
-    if (dataUser.nama_pengguna == nama_pengguna) {
+
+  const handleNavigate = (user_id, nama_pengguna) => {
+    createCookies('prevLink2', '/search')
+    if (idUser == user_id) {
       navigate('/profile')
     } else {
       navigate(`/search/${nama_pengguna}`)
@@ -93,7 +94,7 @@ export default function CardPostingan(...props) {
           <Menu.Item
             color="orange"
             leftSection={<MdDelete style={{ width: rem(14), height: rem(14) }} />}
-            onClick={handleDelete}
+            onClick={() => alert('Fitur empty')}
           >
             Sembunyikan
           </Menu.Item>
@@ -122,7 +123,7 @@ export default function CardPostingan(...props) {
         </ShowModal>
       )}
       <Flex className="w-[90%] h-[50px]" justify={'space-between'} align={'center'}>
-        <Flex className="w-max cursor-pointer" align={'center'} gap={'sm'} onClick={() => handleNavigate(nama_pengguna)}>
+        <Flex className="w-max cursor-pointer" align={'center'} gap={'sm'} onClick={() => handleNavigate(user_id, nama_pengguna)}>
           <img src={`${profileImageUrl}`} alt="pp" loading='lazy' className={`w-[40px] h-[40px] rounded-full border-2 object-cover ${idUser == user_id ? 'border-white ' : 'border-sky-800 '}`} />
           <p className="text-[.9rem]">{nama_pengguna}</p>
         </Flex>
@@ -139,13 +140,17 @@ export default function CardPostingan(...props) {
       </div>
       <Flex className="w-[90%] h-[50px]" justify={'space-between'} align={'center'}>
         <Flex className="w-max" align={'center'} gap={'sm'}>
-          {likes.includes(dataUser?.nama_pengguna) ? (
+          {likes.includes(idUser) ? (
             <FaHeart size={24} color="crimson" className='cursor-pointer' onClick={() => handleLove(id)} />
           ) : <FaRegHeart size={24} color="white" onClick={() => handleLove(id)} className='cursor-pointer' />}
           <TbMessageCircle size={24} color="white" />
           <LuSend size={24} color="white" />
         </Flex>
-        <FaRegBookmark size={24} color="white" />
+        {bookmark.includes(idUser) ? (
+          <FaRegBookmark size={24} onClick={() => handleBookmark(id)} className='cursor-pointer text-sky-500' />
+        ) : (
+          <FaRegBookmark size={24} color="white" onClick={() => handleBookmark(id)} className='cursor-pointer' />
+        )}
       </Flex>
       <Flex className="w-[90%] h-max text-[.8rem]" direction={'column'}>
         <p className='font-semibold'>{formatPengikut(likes?.length)} suka</p>

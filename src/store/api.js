@@ -1,8 +1,8 @@
 import { deleteImage } from "./db";
 import { getCookies } from "./utils";
 
-const endpoint = 'http://localhost:3000'
-// const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+// const endpoint = 'http://localhost:3000'
+const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
 
 // + Auth 
@@ -183,6 +183,24 @@ export const handleLovePostingan = async (data) => {
   }
 }
 
+export const handlebookmarkPostingan = async (data) => {
+  try {
+    const res = await fetch(`${endpoint}/posting/bookmark`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
 export const deletePostingan = async (id) => {
   try {
     const res = await fetch(`${endpoint}/posting/delete/${id}`);
@@ -251,12 +269,14 @@ export const deleteStatusOld = async () => {
     const res = await fetch(`${endpoint}/status/delete`);
     const result = await res.json();
     if(result.status) {
-      const deleteImg = result.data.map( async (item) => {
-        return await deleteImage(item.data.img_status)
-      })
-
-      console.log(deleteImage);
-      return deleteImg
+      const {data} = result
+      console.log({data});
+      if(data.length > 0) {
+        const deleteImg = data.map( async (item) => {
+          await deleteImage(item.data.img_status)
+        })
+        await deleteImg
+      }
     }
   } catch (error) {
     console.log(error);

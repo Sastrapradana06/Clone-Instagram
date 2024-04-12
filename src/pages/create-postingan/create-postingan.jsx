@@ -9,6 +9,8 @@ import { useShallow } from "zustand/react/shallow";
 import { useNavigate, useParams } from "react-router-dom";
 import Notification from "../../components/ui/notification";
 import { FiUploadCloud } from "react-icons/fi";
+import useNotification from "../../hooks/useNotification";
+
 
 export default function CreatePostingan() {
   const [getUserPostingan, userPostingan] = useAppStore(
@@ -19,13 +21,8 @@ export default function CreatePostingan() {
   const [deskripsi, setDeskripsi] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const [status, setStatus] = useState(false)
-  const [title, setTitle] = useState(false)
+  const [status, title, handleNotif] = useNotification()
 
-  const handleNotif = (status, title) => {
-    setStatus(status)
-    setTitle(title)
-  }
 
   const { id } = useParams()
 
@@ -79,7 +76,8 @@ export default function CreatePostingan() {
         deskripsi: deskripsi,
         img_url: result,
         img_profil: userData.data.img_profil,
-        love: []
+        love: [],
+        bookmark: []
       }
     } else {
       data = {
@@ -89,7 +87,8 @@ export default function CreatePostingan() {
         deskripsi: deskripsi,
         img_url: dataEdit.img_url,
         img_profil: dataEdit.img_profil,
-        love: dataEdit.love
+        love: dataEdit.love,
+        bookmark: dataEdit.bookmark
       }
     }
 

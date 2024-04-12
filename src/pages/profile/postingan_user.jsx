@@ -11,6 +11,7 @@ export default function PostinganUser() {
     useShallow((state) => [state.userPostingan, state.getUserPostingan])
   )
 
+
   useEffect(() => {
     getUserPostingan()
   }, [])

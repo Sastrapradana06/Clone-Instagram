@@ -6,51 +6,32 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleToast } from '../../store/utils';
 import { registerAkun } from '../../store/api';
+import useForm from '../../hooks/useForm';
+import useTogglePassword from '../../hooks/useTogglePassword';
 
 
 
 export default function Sign() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [typePassword, setTypePassword] = useState('password')
-  const [data, setData] = useState({
+  const [values, handleInputChange, resetForm] = useForm({
     username: '',
     nama_pengguna: '',
     email: '',
     password: ''
-  })
+  });
+  const [typePassword, togglePasswordVisibility] = useTogglePassword();
+  const [isLoading, setIsLoading] = useState(false)
 
-  const clearInput = () => {
-    const clearData = {
-      username: '',
-      nama_pengguna: '',
-      email: '',
-      password: ''
-    }
-    setData(clearData)
-  }
 
   const navigate = useNavigate()
-
-  const handleTypePassword = () => {
-    { typePassword == 'password' ? setTypePassword('text') : setTypePassword('password') }
-  }
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const res = await registerAkun(data)
+    const res = await registerAkun(values)
     if (res.status) {
       handleToast('Berhasil Membuat Akun', 'success')
       navigate('/')
-      clearInput()
+      resetForm()
     } else {
       handleToast(res.message, 'warning')
     }
@@ -71,8 +52,8 @@ export default function Sign() {
           <div className="w-[90%] ">
             <input
               name='username'
-              value={data.username}
-              onChange={handleInput}
+              value={values.username}
+              onChange={handleInputChange}
               type="text"
               className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
               placeholder="Username"
@@ -81,8 +62,8 @@ export default function Sign() {
           <div className="w-[90%] ">
             <input
               name='nama_pengguna'
-              value={data.nama_pengguna}
-              onChange={handleInput}
+              value={values.nama_pengguna}
+              onChange={handleInputChange}
               type="text"
               className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
               placeholder="Nama pengguna"
@@ -91,8 +72,8 @@ export default function Sign() {
           <div className="w-[90%] ">
             <input
               name='email'
-              value={data.email}
-              onChange={handleInput}
+              value={values.email}
+              onChange={handleInputChange}
               type="email"
               className='w-full p-3 rounded-md outline-none bg-zinc-600 text-[.8rem]'
               placeholder="Email"
@@ -101,21 +82,21 @@ export default function Sign() {
           <div className="w-[90%] h-max bg-zinc-600 rounded-md flex justify-around items-center py-3">
             <input
               name='password'
-              value={data.password}
-              onChange={handleInput}
+              value={values.password}
+              onChange={handleInputChange}
 
               type={typePassword}
               className='w-[80%]  outline-none  text-[.8rem] rounded-md bg-transparent'
               placeholder="Password"
             />
             {typePassword == 'password' ? (
-              <FaEyeSlash className='text-[1.2rem] cursor-pointer text-zinc-400' onClick={handleTypePassword} />
+              <FaEyeSlash className='text-[1.2rem] cursor-pointer text-zinc-400' onClick={togglePasswordVisibility} />
             ) : (
-              <IoEyeSharp className='text-[1.2rem] cursor-pointer text-sky-400' onClick={handleTypePassword} />
+              <IoEyeSharp className='text-[1.2rem] cursor-pointer text-sky-400' onClick={togglePasswordVisibility} />
             )}
           </div>
           <div className="w-[90%]">
-            {data.username && data.password ? (
+            {values.username && values.password ? (
               <Button fullWidth size="md" radius='md' type='submit' disabled={isLoading}>
                 {isLoading ? (
                   <Loader color="green" type="dots" />

@@ -1,7 +1,7 @@
 
 import { Flex } from '@mantine/core';
 import CardPostingan from "../../components/ui/card-postingan";
-import { getAllPostingan, handleLovePostingan } from '../../store/api';
+import { getAllPostingan, handleLovePostingan, handlebookmarkPostingan } from '../../store/api';
 import { useEffect, useState } from 'react';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
@@ -77,7 +77,7 @@ export default function Postingan() {
   }, [])
 
   const handleLove = async (id) => {
-    const data = { id, nama_pengguna: dataUser.nama_pengguna }
+    const data = { id, id_user: user_id }
     const res = await handleLovePostingan(data)
     if (res.status) {
       const newData = dataPostingan.map((item) => {
@@ -94,9 +94,30 @@ export default function Postingan() {
         return item;
       })
       setDataPostingan(newData)
-
     }
   }
+
+  const handleBookmark = async (id) => {
+    const data = { id, id_user: user_id }
+    const res = await handlebookmarkPostingan(data)
+    if (res.status) {
+      const newData = dataPostingan.map((item) => {
+        if (item.id == res.data.id) {
+          return {
+            ...item,
+            data: {
+              ...item.data,
+              bookmark: res.data.bookmark
+            }
+          }
+        }
+
+        return item;
+      })
+      setDataPostingan(newData)
+    }
+  }
+
 
   return (
     <Flex className="w-full h-max  mb-[60px]" direction={'column'} align={'center'} gap={'md'}>
@@ -119,6 +140,8 @@ export default function Postingan() {
               statusText={item.data.deskripsi}
               handleLove={handleLove}
               time={item.data.time}
+              bookmark={item.data.bookmark}
+              handleBookmark={handleBookmark}
             />
           )
         })

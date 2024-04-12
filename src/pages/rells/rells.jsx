@@ -1,58 +1,114 @@
 
-import { AiOutlineMore } from "react-icons/ai";
-import { Flex, Progress } from '@mantine/core';
 import { useEffect, useState } from "react";
-import { FiHeart } from "react-icons/fi";
+import AppShell from "../../components/layout/app-shell";
+import { Tabs } from '@mantine/core';
+import { FaHeart, FaRegBookmark } from "react-icons/fa";
+import { getAllPostingan } from "../../store/api";
+import useAppStore from "../../store/store";
+import { useShallow } from "zustand/react/shallow";
+import { useNavigate } from "react-router-dom";
+import { createCookies, getUserIdByCookies } from "../../store/utils";
+import { ImSpinner9 } from "react-icons/im";
+
+
 
 
 export default function Rells() {
-  const [timesStatus, setTimeStatus] = useState(0)
+  const [updateUserPostingan] = useAppStore(
+    useShallow((state) => [state.updateUserPostingan])
+  )
+  const [isLoading, setIsLoading] = useState(false)
+  const [dataSuka, setDataSuka] = useState([])
+  const [dataBookmark, setDataBookmark] = useState([])
+  const navigate = useNavigate()
+  const user_id = getUserIdByCookies()
+
+
+  const getSuka = async () => {
+    setIsLoading(true)
+    const res = await getAllPostingan()
+    if (res.status) {
+      createCookies('prevLink', '/rells')
+      const filterData = res.data.filter(item => item.data.love.includes(user_id))
+      setDataSuka(filterData)
+      updateUserPostingan(filterData)
+    }
+    setIsLoading(false)
+  }
+
+  const getBookMark = async () => {
+    setIsLoading(true)
+    const res = await getAllPostingan()
+    if (res.status) {
+      const filterData = res.data.filter(item => item.data.bookmark.includes(user_id))
+      setDataBookmark(filterData)
+      updateUserPostingan(filterData)
+    }
+    setIsLoading(false)
+  }
+
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeStatus(prevTime => {
-        if (prevTime >= 100) {
-          clearInterval(interval);
-          return prevTime;
-        } else {
-          return prevTime + 10;
-        }
-      });
-    }, 1000);
+    getSuka()
+  }, [])
 
-    return () => clearInterval(interval);
-  }, []);
-
-  console.log({ timesStatus });
 
   return (
-    <div className="w-full h-max bg-zinc-800 relative text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
-      <div className="w-full h-[90vh]">
-        <img src="https://i.pinimg.com/564x/79/44/05/794405d8840389a7c67093f1aa6d34f6.jpg" alt="" className="w-full h-full object-cover" />
-      </div>
-      <Flex className="absolute top-[10px] w-[100%] h-max m-auto z-20 " direction={'column'} align={'center'} gap={'xs'}>
-        <div className="w-[93%] h-max">
-          <Progress size="xs" value={timesStatus} color="pink" />
-        </div>
-        <Flex className="w-[90%] h-max" justify={'space-between'} align={'center'}>
-          <Flex align={'center'} gap={'sm'}>
-            <img src="https://i.pinimg.com/564x/49/70/06/49700665c8e6366b866bf56e95ad60b6.jpg" alt="img_profil" className="w-[35px] h-[35px] rounded-full object-cover" />
-            <p className="text-[.8rem] font-bold">queen</p>
-          </Flex>
-          <AiOutlineMore size={25} color="white" />
-        </Flex>
-      </Flex>
-      <div className="w-full h-[10vh] ">
-        <Flex className="w-[90%] h-full m-auto" align={'center'} justify={'space-between'}>
-          <input
-            type="text"
-            className="w-[85%] bg-transparent border border-zinc-500 outline-none px-5 py-3 rounded-full text-[.9rem]"
-            placeholder="Kirim pesan"
-          />
-          <FiHeart size={25} className="text-white cursor-pointer" />
+    <AppShell>
+      <div className="min-w-full max-w-max h-max flex flex-col gap-2 items-center py-4">
+        <Tabs defaultValue="suka" variant="default" className=" w-full flex justify-between gap-1">
+          <Tabs.List grow justify="space-between">
+            <Tabs.Tab value="suka" leftSection={<FaHeart size={15} fill="crimson" />} className="hover:bg-transparent" onClick={getSuka}>
+              Suka
+            </Tabs.Tab>
+            <Tabs.Tab value="bookmark" leftSection={<FaRegBookmark size={15} className="text-sky-500" />} className="hover:bg-transparent" onClick={getBookMark}>
+              Bookmark
+            </Tabs.Tab>
+          </Tabs.List>
 
-        </Flex>
+          <Tabs.Panel value="suka" className=" w-full mb-[60px] flex mt-2">
+            {dataSuka.length > 0 ? (
+              dataSuka.map((item, i) => (
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
+                  <img src={item.data.img_url} alt="status" className="w-full h-full object-cover" loading='lazy' />
+                </div>
+              ))
+            ) : (
+              isLoading ? (
+                <div className="w-full h-[60vh] flex justify-center items-center">
+                  <ImSpinner9 size={30} className='text-sky-400 animate-spin' />
+                </div>
+              ) : (
+                <div className="w-full h-max mt-2">
+                  <p className='text-center text-[.8rem] text-zinc-300'>Tidak ada postingan yang anda sukai</p>
+                </div>
+              )
+            )
+            }
+          </Tabs.Panel>
+          <Tabs.Panel value="bookmark" >
+            {dataBookmark.length > 0 ? (
+              dataBookmark.map((item, i) => (
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
+                  <img src={item.data.img_url} alt="status" className="w-full h-full object-cover" loading='lazy' />
+                </div>
+              ))
+            ) : (
+              isLoading ? (
+                <div className="w-full h-[60vh] flex justify-center items-center">
+                  <ImSpinner9 size={30} className='text-sky-400 animate-spin' />
+                </div>
+              ) : (
+                <div className="w-full h-max mt-2">
+                  <p className='text-center text-[.8rem] text-zinc-300'>Tidak ada postingan yang anda simpan</p>
+                </div>
+              )
+            )
+            }
+          </Tabs.Panel>
+
+        </Tabs>
       </div>
-    </div>
+    </AppShell>
   )
 }

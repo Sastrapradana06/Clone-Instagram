@@ -5,16 +5,17 @@ import { useEffect } from "react";
 import CardPostingan from "../../../components/ui/card-postingan";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
-import { handleLovePostingan } from "../../../store/api";
-import { getCookies } from "../../../store/utils";
+import { handleLovePostingan, handlebookmarkPostingan } from "../../../store/api";
+import { getCookies, getUserIdByCookies } from "../../../store/utils";
 
 
 
 export default function DetailPostinganUser() {
-  const [userPostingan, dataUser, updateUserPostingan] = useAppStore(
-    useShallow((state) => [state.userPostingan, state.dataUser, state.updateUserPostingan])
+  const [userPostingan, updateUserPostingan] = useAppStore(
+    useShallow((state) => [state.userPostingan, state.updateUserPostingan])
   )
   const { id } = useParams()
+  const user_id = getUserIdByCookies()
 
 
   const prevLink = getCookies('prevLink')
@@ -32,7 +33,7 @@ export default function DetailPostinganUser() {
   }, [id])
 
   const handleLove = async (id) => {
-    const data = { id, nama_pengguna: dataUser.nama_pengguna }
+    const data = { id, id_user: user_id }
     const res = await handleLovePostingan(data)
     if (res.status) {
       const newData = userPostingan.map((item) => {
@@ -49,7 +50,26 @@ export default function DetailPostinganUser() {
         return item;
       })
       updateUserPostingan(newData)
+    }
+  }
 
+  const handleBookmark = async (id) => {
+    const data = { id, id_user: user_id }
+    const res = await handlebookmarkPostingan(data)
+    if (res.status) {
+      const newData = userPostingan.map((item) => {
+        if (item.id == res.data.id) {
+          return {
+            ...item,
+            data: {
+              ...item.data,
+              bookmark: res.data.bookmark
+            }
+          }
+        }
+        return item;
+      })
+      updateUserPostingan(newData)
     }
   }
 
@@ -71,6 +91,8 @@ export default function DetailPostinganUser() {
                 statusText={item.data.deskripsi}
                 handleLove={handleLove}
                 time={item.data.time}
+                bookmark={item.data.bookmark}
+                handleBookmark={handleBookmark}
               />
             )
           })

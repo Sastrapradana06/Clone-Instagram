@@ -67,7 +67,6 @@ export default function DaftarPengikutMengikuti() {
   }
 
 
-
   useEffect(() => {
     if (pathname.includes('pengikut')) {
       getPengikutUser()

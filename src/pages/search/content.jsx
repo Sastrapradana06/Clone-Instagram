@@ -70,7 +70,6 @@ export default function Content() {
   }, [debouncedValue])
 
 
-
   // const dataPostinagnUser = [
   //   {
   //     id: 1,
@@ -192,7 +191,7 @@ export default function Content() {
         )
       ) : (
         <Flex className="w-full h-max m-auto  mt-2 mb-[60px]" wrap={'wrap'} justify={''}>
-          {dataPostingan ? (
+          {dataPostingan.length > 0 ? (
             dataPostingan.map((item, i) => {
               return (
                 <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
