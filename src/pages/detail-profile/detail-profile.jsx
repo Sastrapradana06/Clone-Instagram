@@ -4,7 +4,7 @@ import NavLink from "../../components/ui/nav-link";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getPostinganById, getStatusById, getUserByNamaPengguna, handleIkutiUser } from "../../store/api";
+import { getPostinganById, getStatusById, getUserByNamaPengguna } from "../../store/api";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../store/utils";
 import Loading from "../../components/ui/loading";
@@ -13,21 +13,25 @@ import { useShallow } from "zustand/react/shallow";
 import { FaSpinner } from "react-icons/fa";
 import ShowImgProfil from "../../components/ui/show-img-profil";
 import CardStatus from "../../components/ui/card-status";
+import useIkutiPengguna from "../../hooks/useIkutiPengguna";
 
 
 export default function DetailProfile() {
   const [dataPengguna, setDataPengguna] = useState({})
   const [postinganPengguna, setPostinganPengguna] = useState([])
   const [statusPengguna, setStatusPengguna] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const [show, setShow] = useState(false);
   const [idStatus, setIdStatus] = useState('')
 
-
-
-  const [updateUserPostingan, getUser, isShowStatus, setIsShowStatus] = useAppStore(
-    useShallow((state) => [state.updateUserPostingan, state.getUser, state.isShowStatus, state.setIsShowStatus])
+  const [updateUserPostingan, isShowStatus, setIsShowStatus] = useAppStore(
+    useShallow((state) => [state.updateUserPostingan, state.isShowStatus, state.setIsShowStatus])
   )
+
+  const [ikutiPengguna, isLoading] = useIkutiPengguna()
+
+  const handleIkuti = async (id_pengguna) => {
+    await ikutiPengguna(id_pengguna, user_id, setDataPengguna)
+  }
 
   const { nama_pengguna } = useParams()
   const navigate = useNavigate()
@@ -82,29 +86,6 @@ export default function DetailProfile() {
     }
   }, [nama_pengguna])
 
-  const ikutiPengguna = async (id_pengguna) => {
-    setIsLoading(true)
-    const data = {
-      id_pengguna,
-      id_user: user_id
-    }
-
-    if (Object.keys(data).length > 0) {
-      const res = await handleIkutiUser(data)
-      if (res.status) {
-        setDataPengguna(prev => ({
-          ...prev,
-          data: {
-            ...prev.data,
-            pengikut: res.data.pengikut
-          }
-        }))
-        getUser()
-      }
-    }
-    setIsLoading(false)
-  }
-
   return (
     <AppShell>
       {show && Object.keys(dataPengguna).length > 0 && (
@@ -155,11 +136,11 @@ export default function DetailProfile() {
                 </button>
               ) : (
                 dataPengguna.data.pengikut.includes(user_id) ? (
-                  <button className="w-[40%] py-1 bg-zinc-300 text-black tracking-[1px] text-[.8rem] rounded-lg hover:bg-zinc-400  font-semibold flex justify-center items-center" onClick={() => ikutiPengguna(dataPengguna.id)}>
+                  <button className="w-[40%] py-1 bg-zinc-300 text-black tracking-[1px] text-[.8rem] rounded-lg hover:bg-zinc-400  font-semibold flex justify-center items-center" onClick={() => handleIkuti(dataPengguna.id)}>
                     Mengikuti
                   </button>
                 ) : (
-                  <button className="w-[40%] py-1 bg-sky-500 text-[.8rem] rounded-lg hover:bg-sky-600  font-semibold flex justify-center items-center tracking-[1px]" onClick={() => ikutiPengguna(dataPengguna.id)}>
+                  <button className="w-[40%] py-1 bg-sky-500 text-[.8rem] rounded-lg hover:bg-sky-600  font-semibold flex justify-center items-center tracking-[1px]" onClick={() => handleIkuti(dataPengguna.id)}>
                     Ikuti
                   </button>
                 )

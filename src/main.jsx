@@ -19,11 +19,11 @@ import Rells from './pages/rells/rells.jsx';
 import EditProfile from './pages/profile/edit-profil/edit-profil.jsx';
 import CreatePostingan from './pages/create-postingan/create-postingan.jsx';
 import { getCookies } from './store/utils.js';
-import ProfileByNamaPengguna from './pages/search/profile/profile_pengguna.jsx';
 import CreateStatus from './pages/create-status/create-status.jsx';
 import DaftarPengikutMengikuti from './pages/profile/pengikut-mengikuti/pengikut-mengikuti.jsx';
 import DetailPostingan from './pages/detail-postingan/detail-postingan.jsx';
 import DetailProfile from './pages/detail-profile/detail-profile.jsx';
+import Likes from './pages/likes/likes.jsx';
 
 // eslint-disable-next-line react/prop-types, react-refresh/only-export-components
 function PrivatePage({ children }) {
@@ -51,17 +51,17 @@ const router = createBrowserRouter([
       </PrivatePage>,
   },
   {
+    path: "/likes-me",
+    element:
+      <PrivatePage>
+        <Likes />
+      </PrivatePage>,
+  },
+  {
     path: "/search",
     element:
       <PrivatePage>
         <Search />
-      </PrivatePage>,
-  },
-  {
-    path: "/search/:nama_pengguna",
-    element:
-      <PrivatePage>
-        <ProfileByNamaPengguna />
       </PrivatePage>,
   },
 

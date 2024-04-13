@@ -1,8 +1,8 @@
 import { deleteImage } from "./db";
 import { getCookies } from "./utils";
 
-// const endpoint = 'http://localhost:3000'
-const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+const endpoint = 'http://localhost:3000'
+// const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
 
 // + Auth 
@@ -67,6 +67,17 @@ export const getUserByNamaPengguna =  async (nama_pengguna) => {
 export const getUserIncludeNamaPengguna =  async (nama_pengguna) => {
   try {
     const res = await fetch(`${endpoint}/user/pengguna/${nama_pengguna}`);
+    const result = await res.json();
+    return result
+  } catch (error) {
+    console.log(error);
+    return error
+  }
+}
+
+export const getUserById =  async (id) => {
+  try {
+    const res = await fetch(`${endpoint}/user/${id}`);
     const result = await res.json();
     return result
   } catch (error) {

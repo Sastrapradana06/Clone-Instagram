@@ -99,7 +99,7 @@ export default function CreatePostingan() {
       setDeskripsi('')
       setUrlImgStatus('')
       if (id) {
-        navigate(`/profile/detail-postingan/${id}`)
+        navigate(`/detail-postingan/${id}`)
       } else {
         navigate('/profile')
       }
@@ -111,7 +111,7 @@ export default function CreatePostingan() {
 
 
   return (
-    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex items-center flex-col">
+    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800  text-white flex items-center flex-col -mb-6">
       <Notification status={status} title={title} />
       <NavLink title={'Buat Postingan'} url={'/home'} />
       <div className="w-[90%] h-max pt-20 pb-5">

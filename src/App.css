@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:wght@400;500&family=Satisfy&display=swap');
 
 
-body {
+html {
   background-color: rgb(27, 27, 27);
   color: white;
   font-family: "Montserrat", sans-serif;

@@ -47,7 +47,7 @@ export default function DaftarPengikutMengikuti() {
 
   const handleNavigate = (nama_pengguna) => {
     createCookies('prevLink2', pathname)
-    navigate(`/search/${nama_pengguna}`)
+    navigate(`/detail-profile/${nama_pengguna}`)
   };
 
   const ikutiPengguna = async (id_pengguna) => {

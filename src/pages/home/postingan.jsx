@@ -1,12 +1,14 @@
 
 import { Flex } from '@mantine/core';
 import CardPostingan from "../../components/ui/card-postingan";
-import { getAllPostingan, handleLovePostingan, handlebookmarkPostingan } from '../../store/api';
+import { getAllPostingan } from '../../store/api';
 import { useEffect, useState } from 'react';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { ImSpinner9 } from "react-icons/im";
 import { getUserIdByCookies } from '../../store/utils';
+import useLovePostingan from '../../hooks/useLovePostingan';
+import useBookmark from '../../hooks/useBookmark';
 
 export default function Postingan() {
   const [dataPostingan, setDataPostingan] = useState([])
@@ -17,8 +19,10 @@ export default function Postingan() {
   const user_id = getUserIdByCookies()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [handleLove] = useLovePostingan()
+  const [handleBookmark] = useBookmark()
 
-  console.log({ dataUser });
+
 
   // const data = [
   //   {
@@ -77,46 +81,12 @@ export default function Postingan() {
     getPostingan()
   }, [])
 
-  const handleLove = async (id) => {
-    const data = { id, id_user: user_id }
-    const res = await handleLovePostingan(data)
-    if (res.status) {
-      const newData = dataPostingan.map((item) => {
-        if (item.id == res.data.id) {
-          return {
-            ...item,
-            data: {
-              ...item.data,
-              love: res.data.love
-            }
-          }
-        }
-
-        return item;
-      })
-      setDataPostingan(newData)
-    }
+  const lovePostingan = async (id) => {
+    await handleLove(id, user_id, dataPostingan, setDataPostingan)
   }
 
-  const handleBookmark = async (id) => {
-    const data = { id, id_user: user_id }
-    const res = await handlebookmarkPostingan(data)
-    if (res.status) {
-      const newData = dataPostingan.map((item) => {
-        if (item.id == res.data.id) {
-          return {
-            ...item,
-            data: {
-              ...item.data,
-              bookmark: res.data.bookmark
-            }
-          }
-        }
-
-        return item;
-      })
-      setDataPostingan(newData)
-    }
+  const bookmarkPostingan = async (id) => {
+    await handleBookmark(id, user_id, dataPostingan, setDataPostingan)
   }
 
 
@@ -128,10 +98,10 @@ export default function Postingan() {
         </div>
       )}
       {dataPostingan.length > 0 && (
-        dataPostingan.map((item, i) => {
+        dataPostingan.map((item) => {
           return (
             <CardPostingan
-              key={i}
+              key={item.id}
               id={item.id}
               user_id={item.data.user_id}
               profileImageUrl={item.data.img_profil}
@@ -139,10 +109,10 @@ export default function Postingan() {
               postImageUrl={item.data.img_url}
               likes={item.data.love}
               statusText={item.data.deskripsi}
-              handleLove={handleLove}
+              handleLove={lovePostingan}
               time={item.data.time}
               bookmark={item.data.bookmark}
-              handleBookmark={handleBookmark}
+              handleBookmark={bookmarkPostingan}
             />
           )
         })

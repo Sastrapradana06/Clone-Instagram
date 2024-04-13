@@ -34,7 +34,7 @@ export default function Content() {
     if (dataUser.nama_pengguna == nama_pengguna) {
       navigate('/profile')
     } else {
-      navigate(`/search/${nama_pengguna}`)
+      navigate(`/detail-profile/${nama_pengguna}`)
     }
   };
 

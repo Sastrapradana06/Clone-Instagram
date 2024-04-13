@@ -6,7 +6,8 @@ import NavLink from "../../components/ui/nav-link";
 import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { getCookies, getUserIdByCookies } from "../../store/utils";
-import { handleLovePostingan, handlebookmarkPostingan } from "../../store/api";
+import useLovePostingan from "../../hooks/useLovePostingan";
+import useBookmark from "../../hooks/useBookmark";
 
 export default function DetailPostingan() {
   const [userPostingan, updateUserPostingan] = useAppStore(
@@ -17,6 +18,8 @@ export default function DetailPostingan() {
 
 
   const prevLink = getCookies('prevLink')
+  const [handleLove] = useLovePostingan()
+  const [handleBookmark] = useBookmark()
 
 
   useEffect(() => {
@@ -30,49 +33,18 @@ export default function DetailPostingan() {
 
   }, [id])
 
-  const handleLove = async (id) => {
-    const data = { id, id_user: user_id }
-    const res = await handleLovePostingan(data)
-    if (res.status) {
-      const newData = userPostingan.map((item) => {
-        if (item.id == res.data.id) {
-          return {
-            ...item,
-            data: {
-              ...item.data,
-              love: res.data.love
-            }
-          }
-        }
 
-        return item;
-      })
-      updateUserPostingan(newData)
-    }
+  const lovePostingan = async (id) => {
+    await handleLove(id, user_id, userPostingan, updateUserPostingan)
   }
 
-  const handleBookmark = async (id) => {
-    const data = { id, id_user: user_id }
-    const res = await handlebookmarkPostingan(data)
-    if (res.status) {
-      const newData = userPostingan.map((item) => {
-        if (item.id == res.data.id) {
-          return {
-            ...item,
-            data: {
-              ...item.data,
-              bookmark: res.data.bookmark
-            }
-          }
-        }
-        return item;
-      })
-      updateUserPostingan(newData)
-    }
+  const bookmarkPostingan = async (id) => {
+    await handleBookmark(id, user_id, userPostingan, updateUserPostingan)
   }
+
 
   return (
-    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white">
+    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white  -mb-7">
       <NavLink title={'Postingan'} url={prevLink} />
       <Flex className="w-full h-max pt-[4rem]  pb-2" direction={'column'} gap={'md'}>
         {userPostingan ? (
@@ -87,10 +59,10 @@ export default function DetailPostingan() {
                 postImageUrl={item.data.img_url}
                 likes={item.data.love}
                 statusText={item.data.deskripsi}
-                handleLove={handleLove}
+                handleLove={lovePostingan}
                 time={item.data.time}
                 bookmark={item.data.bookmark}
-                handleBookmark={handleBookmark}
+                handleBookmark={bookmarkPostingan}
               />
             )
           })
