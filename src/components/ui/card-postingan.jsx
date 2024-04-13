@@ -33,11 +33,11 @@ export default function CardPostingan(...props) {
 
 
   const handleNavigate = (user_id, nama_pengguna) => {
-    createCookies('prevLink2', '/search')
+    createCookies('prevLink2', pathname)
     if (idUser == user_id) {
       navigate('/profile')
     } else {
-      navigate(`/search/${nama_pengguna}`)
+      navigate(`/detail-profile/${nama_pengguna}`)
     }
   };
 

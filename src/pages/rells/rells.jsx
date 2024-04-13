@@ -66,16 +66,16 @@ export default function Rells() {
             </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="suka" className=" w-full mb-[60px] flex mt-2">
+          <Tabs.Panel value="suka" className=" w-full mb-[60px] flex mt-2 flex-wrap">
             {dataSuka.length > 0 ? (
               dataSuka.map((item, i) => (
-                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/detail-postingan/${item.id}`)}>
                   <img src={item.data.img_url} alt="status" className="w-full h-full object-cover" loading='lazy' />
                 </div>
               ))
             ) : (
               isLoading ? (
-                <div className="w-full h-[60vh] flex justify-center items-center">
+                <div className="w-full h-[60vh] flex justify-center items-center flex-wrap">
                   <ImSpinner9 size={30} className='text-sky-400 animate-spin' />
                 </div>
               ) : (
@@ -86,10 +86,10 @@ export default function Rells() {
             )
             }
           </Tabs.Panel>
-          <Tabs.Panel value="bookmark" >
+          <Tabs.Panel value="bookmark" className=" w-full mb-[60px] flex mt-2 flex-wrap" >
             {dataBookmark.length > 0 ? (
               dataBookmark.map((item, i) => (
-                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/detail-postingan/${item.id}`)}>
                   <img src={item.data.img_url} alt="status" className="w-full h-full object-cover" loading='lazy' />
                 </div>
               ))

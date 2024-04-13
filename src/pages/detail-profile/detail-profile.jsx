@@ -1,21 +1,21 @@
 import { Flex } from "@mantine/core";
-import AppShell from "../../../components/layout/app-shell";
-import NavLink from "../../../components/ui/nav-link";
+import AppShell from "../../components/layout/app-shell";
+import NavLink from "../../components/ui/nav-link";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getPostinganById, getStatusById, getUserByNamaPengguna, handleIkutiUser } from "../../../store/api";
+import { getPostinganById, getStatusById, getUserByNamaPengguna, handleIkutiUser } from "../../store/api";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../../store/utils";
-import Loading from "../../../components/ui/loading";
-import useAppStore from "../../../store/store";
+import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../store/utils";
+import Loading from "../../components/ui/loading";
+import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { FaSpinner } from "react-icons/fa";
-import ShowImgProfil from "../../../components/ui/show-img-profil";
-import CardStatus from "../../../components/ui/card-status";
+import ShowImgProfil from "../../components/ui/show-img-profil";
+import CardStatus from "../../components/ui/card-status";
 
 
-export default function ProfileByNamaPengguna() {
+export default function DetailProfile() {
   const [dataPengguna, setDataPengguna] = useState({})
   const [postinganPengguna, setPostinganPengguna] = useState([])
   const [statusPengguna, setStatusPengguna] = useState([])

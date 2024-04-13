@@ -18,6 +18,7 @@ export default function Postingan() {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  console.log({ dataUser });
 
   // const data = [
   //   {
@@ -66,7 +67,7 @@ export default function Postingan() {
     setIsLoading(true)
     const res = await getAllPostingan()
     if (res.status) {
-      const filterData = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id) || item.data.user_id == user_id)
+      const filterData = res.data.filter(item => dataUser?.mengikuti.includes(item.data.user_id) || item.data.user_id == user_id)
       setDataPostingan(filterData)
     }
     setIsLoading(false)

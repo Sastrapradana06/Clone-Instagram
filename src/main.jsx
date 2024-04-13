@@ -17,13 +17,13 @@ import Search from './pages/search/search.jsx';
 import Profile from './pages/profile/profile.jsx';
 import Rells from './pages/rells/rells.jsx';
 import EditProfile from './pages/profile/edit-profil/edit-profil.jsx';
-import PostinganSearch from './pages/search/postingan/postingan.jsx';
 import CreatePostingan from './pages/create-postingan/create-postingan.jsx';
 import { getCookies } from './store/utils.js';
-import DetailPostinganUser from './pages/profile/detail-postingan/detail.jsx';
 import ProfileByNamaPengguna from './pages/search/profile/profile_pengguna.jsx';
 import CreateStatus from './pages/create-status/create-status.jsx';
 import DaftarPengikutMengikuti from './pages/profile/pengikut-mengikuti/pengikut-mengikuti.jsx';
+import DetailPostingan from './pages/detail-postingan/detail-postingan.jsx';
+import DetailProfile from './pages/detail-profile/detail-profile.jsx';
 
 // eslint-disable-next-line react/prop-types, react-refresh/only-export-components
 function PrivatePage({ children }) {
@@ -45,63 +45,103 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <PrivatePage>
-      <Home />
-    </PrivatePage>,
+    element:
+      <PrivatePage>
+        <Home />
+      </PrivatePage>,
   },
   {
     path: "/search",
-    element: <Search />,
+    element:
+      <PrivatePage>
+        <Search />
+      </PrivatePage>,
   },
   {
     path: "/search/:nama_pengguna",
-    element: <ProfileByNamaPengguna />,
+    element:
+      <PrivatePage>
+        <ProfileByNamaPengguna />
+      </PrivatePage>,
   },
+
+  // + Postingan
   {
-    path: "/search/postingan/:id",
-    element: <PostinganSearch />,
+    path: "/detail-postingan/:id",
+    element:
+      <PrivatePage>
+        <DetailPostingan />,
+      </PrivatePage>,
   },
+
 
   // + Profile
   {
     path: "/profile",
-    element: <Profile />,
+    element:
+      <PrivatePage>
+        <Profile />,
+      </PrivatePage>,
+  },
+  {
+    path: "/detail-profile/:nama_pengguna",
+    element:
+      <PrivatePage>
+        <DetailProfile />,
+      </PrivatePage>,
   },
   {
     path: "/profile/edit-profile",
-    element: <EditProfile />,
-  },
-  {
-    path: "/profile/detail-postingan/:id",
-    element: <DetailPostinganUser />,
+    element:
+      <PrivatePage>
+        <EditProfile />,
+      </PrivatePage>,
   },
   {
     path: "/create-postingan",
-    element: <CreatePostingan />,
+    element:
+      <PrivatePage>
+        <CreatePostingan />,
+      </PrivatePage>,
   },
   {
     path: "/edit-postingan/:id",
-    element: <CreatePostingan />,
+    element:
+      <PrivatePage>
+        <CreatePostingan />,
+      </PrivatePage>,
   },
   {
     path: "profile/pengikut/:id",
-    element: <DaftarPengikutMengikuti />,
+    element:
+      <PrivatePage>
+        <DaftarPengikutMengikuti />,
+      </PrivatePage>,
   },
   {
     path: "profile/mengikuti/:id",
-    element: <DaftarPengikutMengikuti />,
+    element:
+      <PrivatePage>
+        <DaftarPengikutMengikuti />,
+      </PrivatePage>,
   },
 
   // + Status
   {
     path: "/create-status",
-    element: <CreateStatus />,
+    element:
+      <PrivatePage>
+        <CreateStatus />,
+      </PrivatePage>,
   },
 
   // + relss
   {
     path: "/rells",
-    element: <Rells />,
+    element:
+      <PrivatePage>
+        <Rells />,
+      </PrivatePage>,
   },
 ])
 

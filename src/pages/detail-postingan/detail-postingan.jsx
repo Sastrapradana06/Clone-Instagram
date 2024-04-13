@@ -1,16 +1,14 @@
 import { useParams } from "react-router-dom";
-import NavLink from "../../../components/ui/nav-link";
 import { Flex } from "@mantine/core";
 import { useEffect } from "react";
-import CardPostingan from "../../../components/ui/card-postingan";
-import { useShallow } from 'zustand/react/shallow'
-import useAppStore from "../../../store/store";
-import { handleLovePostingan, handlebookmarkPostingan } from "../../../store/api";
-import { getCookies, getUserIdByCookies } from "../../../store/utils";
+import CardPostingan from "../../components/ui/card-postingan";
+import NavLink from "../../components/ui/nav-link";
+import useAppStore from "../../store/store";
+import { useShallow } from "zustand/react/shallow";
+import { getCookies, getUserIdByCookies } from "../../store/utils";
+import { handleLovePostingan, handlebookmarkPostingan } from "../../store/api";
 
-
-
-export default function DetailPostinganUser() {
+export default function DetailPostingan() {
   const [userPostingan, updateUserPostingan] = useAppStore(
     useShallow((state) => [state.userPostingan, state.updateUserPostingan])
   )

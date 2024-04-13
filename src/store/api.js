@@ -1,8 +1,8 @@
 import { deleteImage } from "./db";
 import { getCookies } from "./utils";
 
-// const endpoint = 'http://localhost:3000'
-const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+const endpoint = 'http://localhost:3000'
+// const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
 
 // + Auth 
@@ -270,7 +270,6 @@ export const deleteStatusOld = async () => {
     const result = await res.json();
     if(result.status) {
       const {data} = result
-      console.log({data});
       if(data.length > 0) {
         const deleteImg = data.map( async (item) => {
           await deleteImage(item.data.img_status)

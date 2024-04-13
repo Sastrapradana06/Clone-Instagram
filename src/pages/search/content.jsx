@@ -194,7 +194,7 @@ export default function Content() {
           {dataPostingan.length > 0 ? (
             dataPostingan.map((item, i) => {
               return (
-                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/profile/detail-postingan/${item.id}`)}>
+                <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/detail-postingan/${item.id}`)}>
                   <img src={item.data.img_url} alt="status" className="w-full h-full object-cover" loading='lazy' />
                 </div>
               )
