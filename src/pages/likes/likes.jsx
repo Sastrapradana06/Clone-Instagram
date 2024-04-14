@@ -1,13 +1,20 @@
 import { Flex } from "@mantine/core";
 import AppShell from "../../components/layout/app-shell";
-import { getUserIdByCookies } from "../../store/utils";
-import { getPostinganById, getUser } from "../../store/api";
+import { createCookies, getUserIdByCookies } from "../../store/utils";
+import { getPostinganById, getUser } from "../../services/useApi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Likes() {
   const [data, setData] = useState([])
 
   const user_id = getUserIdByCookies()
+  const navigate = useNavigate()
+
+  const handleNavigate = (nama_pengguna) => {
+    createCookies('prevLink2', '/likes-me')
+    navigate(`/detail-profile/${nama_pengguna}`)
+  };
 
 
   const getLoves = async () => {
@@ -38,6 +45,8 @@ export default function Likes() {
       setData(combinedArray);
     }
   }
+
+
   useEffect(() => {
     getLoves()
   }, [])
@@ -53,7 +62,7 @@ export default function Likes() {
             data.map((item, i) => (
               <Flex className="w-full mb-4" justify={'space-between'} align={'center'} key={i}>
                 <Flex className=" w-[80%]" align={'center'}>
-                  <div className="w-[25%]">
+                  <div className="w-[25%] cursor-pointer" onClick={() => handleNavigate(item.nama_pengguna)}>
                     <img src={item.img_profil} alt="profil" className="w-[50px] h-[50px] rounded-full object-cover" loading="lazy" />
                   </div>
                   <div className="w-[70%] h-max">

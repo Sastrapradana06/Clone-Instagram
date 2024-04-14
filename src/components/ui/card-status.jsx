@@ -10,8 +10,8 @@ import { Carousel } from '@mantine/carousel';
 import { Menu, rem } from '@mantine/core';
 import { getUserIdByCookies, formatFirestoreTimestamp } from "../../store/utils";
 import { MdDelete } from "react-icons/md";
-import { deleteStatusUser } from "../../store/api";
-import { deleteImage } from "../../store/db";
+import { deleteStatusUser } from "../../services/useApi";
+import { deleteImage } from "../../services/db";
 import { useNavigate } from "react-router-dom";
 
 
@@ -78,6 +78,7 @@ export default function CardStatus({ data, id }) {
     setIsShowStatus(false)
     navigate(`/search/${nama_pengguna}`)
   }
+
 
   // useEffect(() => {
   //   const interval = setInterval(() => {

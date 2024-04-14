@@ -4,7 +4,7 @@ import { FaEyeSlash } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { Button, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { deleteStatusOld, loginAkun } from './store/api';
+import { deleteStatusOld, loginAkun } from './services/useApi';
 import { createCookies, generateToken } from './store/utils';
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from './store/store';

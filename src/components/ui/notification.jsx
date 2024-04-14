@@ -35,8 +35,10 @@ const Notification = ({ status, title }) => {
       status,
       messages: message
     });
+
     setTimeout(() => {
       setIsNotif(false);
+      setMessageNotif({ status: '', messages: '' });
     }, 2000);
   };
 
@@ -45,7 +47,6 @@ const Notification = ({ status, title }) => {
       handleNotification(title, status);
     }
   }, [status, title]);
-
 
 
   return (

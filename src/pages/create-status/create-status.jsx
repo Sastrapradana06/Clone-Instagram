@@ -2,8 +2,8 @@ import NavLink from "../../components/ui/nav-link";
 import { Flex, Button, Loader } from "@mantine/core";
 import { useRef, useState } from 'react';
 import { getCookies } from "../../store/utils";
-import { uploadImgStatus } from "../../store/db";
-import { createStatus } from "../../store/api";
+import { uploadImgStatus } from "../../services/db"
+import { createStatus } from "../../services/useApi"
 import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { useNavigate } from "react-router-dom";
@@ -73,7 +73,7 @@ export default function CreateStatus() {
 
 
   return (
-    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex items-center flex-col">
+    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800 text-white flex items-center flex-col -mb-7">
       <Notification status={status} title={title} />
       <NavLink title={'Buat Status'} url={'/profile'} />
       <div className="w-[90%] h-max pt-20 pb-5">

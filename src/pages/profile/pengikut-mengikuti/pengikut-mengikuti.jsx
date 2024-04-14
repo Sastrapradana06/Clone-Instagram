@@ -1,6 +1,6 @@
 import NavLink from "../../../components/ui/nav-link";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { getUser, handleIkutiUser } from "../../../store/api";
+import { getUser, handleIkutiUser } from "../../../services/useApi";
 import { useEffect, useState } from "react";
 import { Flex } from '@mantine/core';
 import { createCookies, formatPengikut, getUserIdByCookies } from "../../../store/utils";

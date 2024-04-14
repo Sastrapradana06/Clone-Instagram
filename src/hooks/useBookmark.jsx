@@ -1,4 +1,4 @@
-import { handlebookmarkPostingan } from "../store/api"
+import { handlebookmarkPostingan } from "../services/useApi"
 
 export default function useBookmark() {
 

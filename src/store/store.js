@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { getPostinganById, getStatusById, getUserLogin } from './api';
+import { getPostinganById, getStatusById, getUserLogin  } from '../services/useApi'
 import { getCookies } from './utils';
 
 

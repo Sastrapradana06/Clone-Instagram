@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { handleIkutiUser } from "../store/api";
+import { handleIkutiUser } from "../services/useApi";
 import useAppStore from "../store/store";
 import { useShallow } from "zustand/react/shallow";
 

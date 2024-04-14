@@ -134,7 +134,7 @@ export default function UserProfile() {
         ) : <SkeletonCard />}
         <Flex className="w-full h-max mt-2" justify={'space-between'} align={'center'}>
           <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/edit-profile' title='Edit Profil' />
-          <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/profile/bagikan-profile' title='Bagikan Profil' />
+          <ButtonLink style='w-[40%] py-1 bg-zinc-800 text-[.8rem] rounded-lg hover:text-sky-600' url='/' title='Bagikan Profil' />
           <button className="w-[15%] py-1 bg-zinc-800 text-[.8rem] rounded-lg flex justify-center items-center cursor-pointer hover:bg-zinc-900" onClick={() => setIsPeople(prevIsPeople => !prevIsPeople)}>
             <TiUserAdd size={20} fill="white" />
           </button>

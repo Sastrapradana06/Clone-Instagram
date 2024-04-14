@@ -112,8 +112,11 @@ export const getCookies = (name) => {
 
 export const getUserIdByCookies = () => {
   const cookiesData = getCookies('user_data')
-  const {id} = JSON.parse(cookiesData)
-  return id
+  if(cookiesData) {
+    const {id} = JSON.parse(cookiesData)
+    return id
+
+  }
 }
 
 export const deleteAllCookies = () => {

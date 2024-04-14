@@ -1,7 +1,7 @@
 
 import { Flex } from '@mantine/core';
 import CardPostingan from "../../components/ui/card-postingan";
-import { getAllPostingan } from '../../store/api';
+import { getAllPostingan } from '../../services/useApi';
 import { useEffect, useState } from 'react';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';

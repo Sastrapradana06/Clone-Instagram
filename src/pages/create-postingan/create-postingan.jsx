@@ -2,8 +2,8 @@ import NavLink from "../../components/ui/nav-link";
 import { Flex, Button, Loader } from "@mantine/core";
 import { useEffect, useRef, useState } from 'react';
 import { getCookies } from "../../store/utils";
-import { uploadPostingan } from "../../store/db";
-import { posting } from "../../store/api";
+import { uploadPostingan } from "../../services/db"
+import { posting } from "../../services/useApi"
 import useAppStore from "../../store/store";
 import { useShallow } from "zustand/react/shallow";
 import { useNavigate, useParams } from "react-router-dom";
@@ -111,7 +111,7 @@ export default function CreatePostingan() {
 
 
   return (
-    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800  text-white flex items-center flex-col -mb-6">
+    <div className="w-full min-h-[100vh] max-h-max bg-zinc-800  text-white flex items-center flex-col -mb-7">
       <Notification status={status} title={title} />
       <NavLink title={'Buat Postingan'} url={'/home'} />
       <div className="w-[90%] h-max pt-20 pb-5">
@@ -143,7 +143,7 @@ export default function CreatePostingan() {
           </Flex>
 
           <div className="w-full">
-            <Button variant="light" color="green" type="submit">
+            <Button variant="light" color="green" type="submit" disabled={urlImgStatus == ''}>
               {isLoading ? (
                 <Loader color="green" type="dots" />
               ) : id ? 'Edit' : 'Posting'}

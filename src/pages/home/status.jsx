@@ -2,15 +2,17 @@ import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
 import { useEffect, useState } from 'react';
 import CardStatus from '../../components/ui/card-status';
-import { getAllStatus } from '../../store/api';
+import { getAllStatus } from '../../services/useApi';
 
 export default function Status() {
-  const [isShowStatus, setIsShowStatus, dataUser] = useAppStore(
-    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser])
+  const [isShowStatus, setIsShowStatus, dataUser, userStatus] = useAppStore(
+    useShallow((state) => [state.isShowStatus, state.setIsShowStatus, state.dataUser, state.userStatus])
   )
   const [idStatus, setIdStatus] = useState()
   const [dataStatus, setDataStatus] = useState([])
+  const [data, setData] = useState([])
 
+  // console.log({ userStatus });
 
   // const dataStatus = [
   //   {
@@ -33,17 +35,22 @@ export default function Status() {
   //   },
   // ]
 
-  const showStatus = (id) => {
+  const showStatus = (id, type) => {
     setIdStatus(id)
     setIsShowStatus(true)
+    if (type == 'user') {
+      setData(userStatus)
+    } else {
+      setData(dataStatus)
+    }
   }
 
 
   const getStatus = async () => {
     const res = await getAllStatus()
     if (res.status) {
-      const filterData = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
-      setDataStatus(filterData)
+      const getStatusMengikuti = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
+      setDataStatus(getStatusMengikuti)
     }
   }
 
@@ -54,24 +61,29 @@ export default function Status() {
 
 
 
-
   return (
     <div className="w-[90%] h-max overflow-x-scroll whitespace-nowrap pt-[60px]">
       {isShowStatus && (
         <div className="w-full h-[100vh] fixed left-0 top-0 bg-zinc-800 z-50">
           <CardStatus
-            data={dataStatus}
+            data={data}
             id={idStatus}
           />
         </div>
       )}
-      <div className="w-[70px] h-[70px] rounded-full border-2 inline-block mr-4">
-        <img src={dataUser?.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
-      </div>
+      {userStatus ? (
+        <div className="w-[70px] h-[70px] rounded-full border-2 inline-block mr-4 cursor-pointer" onClick={() => showStatus(undefined, 'user')}>
+          <img src={dataUser?.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
+        </div>
+      ) : (
+        <div className="w-[70px] h-[70px] rounded-full  inline-block mr-4">
+          <img src={dataUser?.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
+        </div>
+      )}
       {dataStatus ? (
         dataStatus.map((item) => {
           return (
-            <div className="w-[70px] h-[70px] rounded-full border-2 border-pink-600 inline-block mr-4 cursor-pointer" key={item.id} onClick={() => showStatus(item.id)}>
+            <div className="w-[70px] h-[70px] rounded-full border-2 border-pink-600 inline-block mr-4 cursor-pointer" key={item.id} onClick={() => showStatus(item.id, 'following')}>
               <img src={item.data.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
             </div>
           )

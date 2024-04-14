@@ -3,11 +3,11 @@ import { FaEyeSlash } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { Button, Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import { handleToast } from '../../store/utils';
-import { registerAkun } from '../../store/api';
+import { registerAkun } from '../../services/useApi';
 import useForm from '../../hooks/useForm';
 import useTogglePassword from '../../hooks/useTogglePassword';
+import useNotification from '../../hooks/useNotification';
+import Notification from '../../components/ui/notification';
 
 
 
@@ -20,6 +20,7 @@ export default function Sign() {
   });
   const [typePassword, togglePasswordVisibility] = useTogglePassword();
   const [isLoading, setIsLoading] = useState(false)
+  const [status, title, handleNotif] = useNotification()
 
 
   const navigate = useNavigate()
@@ -27,14 +28,21 @@ export default function Sign() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const res = await registerAkun(values)
-    if (res.status) {
-      handleToast('Berhasil Membuat Akun', 'success')
-      navigate('/')
-      resetForm()
+    const { password } = values
+
+    if (password.length < 6) {
+      handleNotif('error', 'Password min 6 huruf/angka')
     } else {
-      handleToast(res.message, 'warning')
+      const res = await registerAkun(values)
+      if (res.status) {
+        handleNotif('success', 'Berhasil Membuat Akun')
+        navigate('/')
+        resetForm()
+      } else {
+        handleNotif('error', res.message)
+      }
     }
+
     setIsLoading(false)
 
   }
@@ -43,7 +51,7 @@ export default function Sign() {
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-900 flex flex-col justify-center items-center gap-6 text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
-      <ToastContainer />
+      <Notification status={status} title={title} />
       <div className="w-[90%] h-max  flex flex-col items-center gap-6">
         <div className="text-center">
           <h1 style={{ fontFamily: 'Satisfy', fontWeight: 400 }} className="text-[2rem]">Snapvibes</h1>
@@ -96,7 +104,7 @@ export default function Sign() {
             )}
           </div>
           <div className="w-[90%]">
-            {values.username && values.password ? (
+            {values.username && values.password && values.nama_pengguna && values.email ? (
               <Button fullWidth size="md" radius='md' type='submit' disabled={isLoading}>
                 {isLoading ? (
                   <Loader color="green" type="dots" />

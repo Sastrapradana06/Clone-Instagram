@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { generateRandomString } from "./utils";
+import { generateRandomString } from "../store/utils"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCI54smCNLtdNLco59uGNpPazA_ETLk8NE",

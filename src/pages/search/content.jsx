@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { IoSearch } from "react-icons/io5";
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { getAllPostingan, getUserIncludeNamaPengguna } from '../../store/api';
+import { getAllPostingan, getUserIncludeNamaPengguna } from '../../services/useApi';
 import useAppStore from '../../store/store';
 import { useShallow } from 'zustand/react/shallow';
 import { FaArrowLeftLong } from "react-icons/fa6";

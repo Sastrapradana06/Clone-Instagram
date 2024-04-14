@@ -1,4 +1,4 @@
-import { handleLovePostingan } from "../store/api"
+import { handleLovePostingan } from "../services/useApi"
 
 export default function useLovePostingan() {
   const handleLove = async (id, user_id, dataPostingan, setDataPostingan) => {

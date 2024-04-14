@@ -4,8 +4,8 @@ import NavLink from "../../../components/ui/nav-link";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from "../../../store/store";
 import { createCookies, getCookies } from "../../../store/utils";
-import { editUserProfil } from "../../../store/api";
-import { uploadImages } from "../../../store/db";
+import { editUserProfil } from "../../../services/useApi";
+import { uploadImages } from "../../../services/db";
 import Notification from "../../../components/ui/notification";
 
 export default function EditProfile() {

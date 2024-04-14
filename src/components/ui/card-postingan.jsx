@@ -12,9 +12,9 @@ import { useShallow } from 'zustand/react/shallow';
 import { MdDelete } from "react-icons/md";
 import { useState } from 'react';
 import ShowModal from './modal';
-import { deletePostingan } from '../../store/api';
+import { deletePostingan } from '../../services/useApi';
 import { useNavigate, useLocation } from "react-router-dom";
-import { deleteImage } from '../../store/db';
+import { deleteImage } from '../../services/db';
 
 
 

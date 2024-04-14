@@ -1,8 +1,8 @@
-import { deleteImage } from "./db";
-import { getCookies } from "./utils";
+import { getCookies } from "../store/utils"
+import { deleteImage } from "./db"
 
-// const endpoint = 'http://localhost:3000'
-const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+const endpoint = 'http://localhost:3000'
+// const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
 
 
 // + Auth 

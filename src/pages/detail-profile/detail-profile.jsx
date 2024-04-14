@@ -4,7 +4,7 @@ import NavLink from "../../components/ui/nav-link";
 import { TiUserAdd } from "react-icons/ti";
 import { TbBoxPadding } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getPostinganById, getStatusById, getUserByNamaPengguna } from "../../store/api";
+import { getPostinganById, getStatusById, getUserByNamaPengguna } from "../../services/useApi";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { createCookies, formatPengikut, getCookies, getUserIdByCookies } from "../../store/utils";
 import Loading from "../../components/ui/loading";
