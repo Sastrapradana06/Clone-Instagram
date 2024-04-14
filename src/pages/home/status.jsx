@@ -35,6 +35,7 @@ export default function Status() {
   //   },
   // ]
 
+
   const showStatus = (id, type) => {
     setIdStatus(id)
     setIsShowStatus(true)
@@ -71,7 +72,7 @@ export default function Status() {
           />
         </div>
       )}
-      {userStatus ? (
+      {userStatus && userStatus.length > 0 ? (
         <div className="w-[70px] h-[70px] rounded-full border-2 inline-block mr-4 cursor-pointer" onClick={() => showStatus(undefined, 'user')}>
           <img src={dataUser?.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
         </div>

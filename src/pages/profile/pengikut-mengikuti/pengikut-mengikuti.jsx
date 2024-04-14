@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { getUser, handleIkutiUser } from "../../../services/useApi";
 import { useEffect, useState } from "react";
 import { Flex } from '@mantine/core';
-import { createCookies, formatPengikut, getUserIdByCookies } from "../../../store/utils";
+import { createCookies, formatPengikut } from "../../../store/utils";
 import Loading from "../../../components/ui/loading";
 import useAppStore from "../../../store/store";
 import { useShallow } from "zustand/react/shallow";
@@ -20,7 +20,6 @@ export default function DaftarPengikutMengikuti() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { id } = useParams()
-  const user_id = getUserIdByCookies()
 
 
   const getPengikutUser = async () => {
@@ -54,7 +53,7 @@ export default function DaftarPengikutMengikuti() {
     setIsLoading(true)
     const data = {
       id_pengguna,
-      id_user: user_id
+      id_user: id
     }
 
     if (Object.keys(data).length > 0) {

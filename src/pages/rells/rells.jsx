@@ -66,7 +66,7 @@ export default function Rells() {
             </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="suka" className=" w-full mb-[60px] flex mt-2 flex-wrap">
+          <Tabs.Panel value="suka" className=" w-full mb-[60px] flex mt-2 flex-wrap gap-[1.5px]">
             {dataSuka.length > 0 ? (
               dataSuka.map((item, i) => (
                 <div className="w-[33%] h-[150px] mt-1 cursor-pointer" key={i} onClick={() => navigate(`/detail-postingan/${item.id}`)}>
