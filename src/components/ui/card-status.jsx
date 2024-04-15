@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import { AiOutlineMore } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
-import { Flex } from '@mantine/core';
+import { Flex, Indicator } from '@mantine/core';
 import { useEffect } from "react";
 // import { FiHeart } from "react-icons/fi";
 import { useShallow } from 'zustand/react/shallow'
 import useAppStore from '../../store/store';
 import { Carousel } from '@mantine/carousel';
-import { Menu, rem } from '@mantine/core';
+import { Menu, rem, Progress } from '@mantine/core';
 import { getUserIdByCookies, formatFirestoreTimestamp } from "../../store/utils";
 import { MdDelete } from "react-icons/md";
 import { deleteStatusUser } from "../../services/useApi";
@@ -99,7 +99,19 @@ export default function CardStatus({ data, id }) {
 
   return (
     <>
-      <Carousel height={"100vh"} withControls={false}>
+      {/* <div className="absolute w-[90%]  left-0 right-0 flex gap-1 h-max z-30 p-1 m-auto">
+        {data.map((item) => (
+          <div className="w-full h-max" key={item.id}>
+            <Progress size="xs" radius={"lg"} value={100} color={'pink'} />
+          </div>
+        ))}
+      </div> */}
+      <Carousel
+        height={"100vh"}
+        withControls={false}
+        withIndicators
+        classNames={{ indicators: 'p-2 w-full absolute top-0 h-max' }}
+      >
         {data.map((status, index) => (
           <Carousel.Slide key={index}>
             <div key={index} className="w-full h-[100vh] flex-none" id={status.id} >
@@ -129,11 +141,3 @@ export default function CardStatus({ data, id }) {
 }
 
 
-
-{/* <div className="absolute w-[100%] flex gap-1 h-max z-30 p-1">
-        {data.map((item) => (
-          <div className="w-full h-max" key={item.id}>
-            <Progress size="xs" radius={"lg"} value={100} color={item.id == id ? 'pink' : 'white'} />
-          </div>
-        ))}
-      </div> */}

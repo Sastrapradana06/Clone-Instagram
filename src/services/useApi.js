@@ -2,7 +2,7 @@ import { getCookies } from "../store/utils"
 import { deleteImage } from "./db"
 
 // const endpoint = 'http://localhost:3000'
-const endpoint = 'https://jqg00d9f-3000.asse.devtunnels.ms'
+const endpoint = 'https://api-website-snapvibes.onrender.com'
 
 
 // + Auth 

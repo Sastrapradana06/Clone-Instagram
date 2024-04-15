@@ -10,7 +10,6 @@ import useNotification from '../../hooks/useNotification';
 import Notification from '../../components/ui/notification';
 
 
-
 export default function Sign() {
   const [values, handleInputChange, resetForm] = useForm({
     username: '',
@@ -21,17 +20,17 @@ export default function Sign() {
   const [typePassword, togglePasswordVisibility] = useTogglePassword();
   const [isLoading, setIsLoading] = useState(false)
   const [status, title, handleNotif] = useNotification()
-
-
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const { password } = values
+    const { nama_pengguna, password } = values
 
     if (password.length < 6) {
       handleNotif('error', 'Password min 6 huruf/angka')
+    } else if (nama_pengguna.includes(" ")) {
+      handleNotif('error', 'Nama pengguna tidak boleh menggunakan spasi')
     } else {
       const res = await registerAkun(values)
       if (res.status) {
@@ -42,12 +41,8 @@ export default function Sign() {
         handleNotif('error', res.message)
       }
     }
-
     setIsLoading(false)
-
   }
-
-
 
   return (
     <div className="w-full min-h-[100vh] max-h-max bg-zinc-900 flex flex-col justify-center items-center gap-6 text-white" style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>

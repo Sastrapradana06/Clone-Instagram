@@ -127,7 +127,7 @@ export default function DetailProfile() {
             <div className="w-[90%] h-max text-[.9rem] m-auto">
               <p className='capitalize' style={{ fontFamily: 'Poppins', fontWeight: 700 }}>{dataPengguna?.data.username}</p>
               <p className='-mt-1 capitalize' style={{ fontFamily: 'Poppins', fontWeight: 400 }}>{dataPengguna?.data.bio}</p>
-              <a href={dataPengguna.data.tautan} className='text-sky-300 text-[.8rem]' style={{ fontFamily: 'Poppins', fontWeight: 400 }}>{dataPengguna.data.tautan}</a>
+              <a href={dataPengguna.data.tautan} className='text-sky-300 text-[.8rem]' style={{ fontFamily: 'Poppins', fontWeight: 400 }} target="_blank">{dataPengguna.data.tautan}</a>
             </div>
             <Flex className="w-[90%] m-auto h-max mt-2" justify={'space-between'} align={'center'}>
               {isLoading ? (

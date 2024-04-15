@@ -12,8 +12,6 @@ export default function Status() {
   const [dataStatus, setDataStatus] = useState([])
   const [data, setData] = useState([])
 
-  // console.log({ userStatus });
-
   // const dataStatus = [
   //   {
   //     id: 1,
@@ -35,23 +33,31 @@ export default function Status() {
   //   },
   // ]
 
-
-  const showStatus = (id, type) => {
-    setIdStatus(id)
+  const showStatus = (data, type) => {
+    // setIdStatus(id)
     setIsShowStatus(true)
     if (type == 'user') {
       setData(userStatus)
     } else {
-      setData(dataStatus)
+      setData(data)
     }
   }
-
 
   const getStatus = async () => {
     const res = await getAllStatus()
     if (res.status) {
       const getStatusMengikuti = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
-      setDataStatus(getStatusMengikuti)
+      const groupedData = getStatusMengikuti.reduce((acc, obj) => {
+        const key = obj.data.user_id;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+      }, {});
+
+      const groupedArray = Object.values(groupedData);
+      setDataStatus(groupedArray)
     }
   }
 
@@ -59,8 +65,6 @@ export default function Status() {
   useEffect(() => {
     getStatus()
   }, [])
-
-
 
   return (
     <div className="w-[90%] h-max overflow-x-scroll whitespace-nowrap pt-[60px]">
@@ -84,8 +88,8 @@ export default function Status() {
       {dataStatus ? (
         dataStatus.map((item) => {
           return (
-            <div className="w-[70px] h-[70px] rounded-full border-2 border-pink-600 inline-block mr-4 cursor-pointer" key={item.id} onClick={() => showStatus(item.id, 'following')}>
-              <img src={item.data.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
+            <div className="w-[70px] h-[70px] rounded-full border-2 border-pink-600 inline-block mr-4 cursor-pointer" key={item[0].id} onClick={() => showStatus(item, 'following')}>
+              <img src={item[0].data.img_profil} alt="img" className="w-full h-full rounded-full object-cover" />
             </div>
           )
         })
