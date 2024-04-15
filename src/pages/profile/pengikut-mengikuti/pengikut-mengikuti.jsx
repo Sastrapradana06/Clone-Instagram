@@ -89,7 +89,7 @@ export default function DaftarPengikutMengikuti() {
                   <p className='text-[.8rem]' style={{ fontFamily: 'Poppins' }}>{item.data.nama_pengguna}</p>
                 </Flex>
                 {pathname.includes('pengikut') ? (
-                  dataUser.mengikuti.includes(item.id) ? (
+                  dataUser?.mengikuti.includes(item.id) ? (
                     <button className="bg-zinc-200 text-black px-3 py-1 rounded-md text-[.8rem] tracking-[1px] hover:bg-zinc-300" onClick={() => ikutiPengguna(item.id)}> Berhenti Ikuti</button>
                   ) : (
                     <button className="bg-sky-500 px-3 py-1 rounded-md text-[.8rem] tracking-[1px] hover:bg-sky-600" onClick={() => ikutiPengguna(item.id)}>Ikuti Balik</button>

@@ -46,7 +46,7 @@ export default function Status() {
   const getStatus = async () => {
     const res = await getAllStatus()
     if (res.status) {
-      const getStatusMengikuti = res.data.filter(item => dataUser.mengikuti.includes(item.data.user_id))
+      const getStatusMengikuti = res.data.filter(item => dataUser?.mengikuti.includes(item.data.user_id))
       const groupedData = getStatusMengikuti.reduce((acc, obj) => {
         const key = obj.data.user_id;
         if (!acc[key]) {
