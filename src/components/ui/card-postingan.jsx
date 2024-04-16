@@ -17,14 +17,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { deleteImage } from '../../services/db';
 
 
-
-
 export default function CardPostingan(...props) {
   const [isModal, setIsModal] = useState(false)
   const [getUserPostingan] = useAppStore(
     useShallow((state) => [state.getUserPostingan])
   )
-  const { key, id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time, bookmark, handleBookmark } = props[0];
+  const { id, user_id, profileImageUrl, nama_pengguna, postImageUrl, likes, statusText, handleLove, time, bookmark, handleBookmark } = props[0];
 
   const idUser = getUserIdByCookies()
 
@@ -104,7 +102,7 @@ export default function CardPostingan(...props) {
   }
 
   return (
-    <Flex id={`${id}`} className="w-full h-max" direction={'column'} align={'center'} style={{ fontFamily: 'Montserrat', fontWeight: 400 }} key={`${key}`}>
+    <Flex id={`${id}`} className="w-full h-max" direction={'column'} align={'center'} style={{ fontFamily: 'Montserrat', fontWeight: 400 }}>
       {isModal && (
         <ShowModal>
           <div className="w-[90%] bg-zinc-200 shadow-xl flex flex-col items-center gap-4 text-black p-2 rounded-lg">

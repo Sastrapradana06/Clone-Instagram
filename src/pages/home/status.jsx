@@ -63,8 +63,10 @@ export default function Status() {
 
 
   useEffect(() => {
-    getStatus()
-  }, [])
+    if (dataUser) {
+      getStatus()
+    }
+  }, [dataUser])
 
   return (
     <div className="w-[90%] h-max overflow-x-scroll whitespace-nowrap pt-[60px]">

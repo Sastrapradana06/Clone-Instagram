@@ -78,8 +78,10 @@ export default function Postingan() {
   }
 
   useEffect(() => {
-    getPostingan()
-  }, [])
+    if (dataUser) {
+      getPostingan()
+    }
+  }, [dataUser])
 
   const lovePostingan = async (id) => {
     await handleLove(id, user_id, dataPostingan, setDataPostingan)
@@ -88,6 +90,7 @@ export default function Postingan() {
   const bookmarkPostingan = async (id) => {
     await handleBookmark(id, user_id, dataPostingan, setDataPostingan)
   }
+  console.log({ dataPostingan, dataUser });
 
 
   return (

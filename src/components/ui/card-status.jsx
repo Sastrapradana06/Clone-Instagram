@@ -19,8 +19,8 @@ import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 export default function CardStatus({ data, id }) {
   const idUser = getUserIdByCookies()
-  const [setIsShowStatus, getUserStatus] = useAppStore(
-    useShallow((state) => [state.setIsShowStatus, state.getUserStatus])
+  const [setIsShowStatus, getUserStatus, dataUser] = useAppStore(
+    useShallow((state) => [state.setIsShowStatus, state.getUserStatus, state.dataUser])
   )
 
   const navigate = useNavigate()
@@ -76,7 +76,11 @@ export default function CardStatus({ data, id }) {
 
   const handleNavigate = (nama_pengguna) => {
     setIsShowStatus(false)
-    navigate(`/search/${nama_pengguna}`)
+    if (nama_pengguna !== dataUser.nama_pengguna) {
+      navigate(`/detail-profile/${nama_pengguna}`)
+    } else {
+      navigate(`/profile`)
+    }
   }
 
 
@@ -119,7 +123,7 @@ export default function CardStatus({ data, id }) {
               <Flex className="absolute top-[15px] w-[100%] h-max m-auto z-20 " direction={'column'} align={'center'} gap={'xs'}>
                 <Flex className="w-[90%] h-max" justify={'space-between'} align={'center'}>
                   <Flex align={'center'} gap={'sm'} className="">
-                    <img src={status.data.img_profil} alt={`img_profil_${index}`} className="w-[50px] h-[50px] rounded-full object-cover cursor-pointer" loading="lazy" onClick={handleNavigate} />
+                    <img src={status.data.img_profil} alt={`img_profil_${index}`} className="w-[50px] h-[50px] rounded-full object-cover cursor-pointer" loading="lazy" onClick={() => handleNavigate(status.data.nama_pengguna)} />
                     <Flex direction={'column'}>
                       <p className="text-[.9rem] font-bold">{status.data.nama_pengguna}</p>
                       <p className="text-[.7rem] text-zinc-300">{formatFirestoreTimestamp(status.data.time)}</p>
