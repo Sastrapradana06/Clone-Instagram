@@ -16,8 +16,8 @@ import useNotification from './hooks/useNotification';
 export default function App() {
 
   const [values, handleInputChange, resetForm] = useForm({
-    nama_pengguna: '',
-    password: '',
+    nama_pengguna: 'Snapvibes',
+    password: 'snapvibes',
   });
   const [typePassword, togglePasswordVisibility] = useTogglePassword();
   const [status, title, handleNotif] = useNotification()
